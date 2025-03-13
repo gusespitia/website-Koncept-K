@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
@@ -16,12 +17,19 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-white shadow-md">
+    <nav className="flex items-center justify-between p-8 shadow-md bg-[#EDBCA4]">
       {/* Logo */}
+      
       <Link href="/" className="text-xl font-bold">
         Koncept K
       </Link>
-
+      <Image
+        src="/logo.png"
+        alt="Logo"
+        width={100}
+        height={100}
+        className="mr-4"
+      />
       {/* Menú Desktop */}
       <div className="hidden md:flex space-x-6">
        
