@@ -8,6 +8,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const menu = [
+    { name: "Home", href: "/" },
+    { name: "Over ons", href: "/overons" },
+    { name: "Merken", href: "/merken" },
+    { name: "Contact", href: "/contact" },
+  ]
 
   return (
     <nav className="flex items-center justify-between p-4 bg-white shadow-md">
@@ -33,15 +39,12 @@ export default function Navbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem>
-              <Link href="/">Inicio</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/productos">Productos</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/contacto">Contacto</Link>
-            </DropdownMenuItem>
+            {menu.map((item) => (
+              <DropdownMenuItem key={item.name}>
+                <Link href={item.href}>{item.name}</Link>
+              </DropdownMenuItem>
+            ))}
+           
             
           </DropdownMenuContent>
         </DropdownMenu>
