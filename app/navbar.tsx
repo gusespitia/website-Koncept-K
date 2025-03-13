@@ -4,67 +4,84 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const menu = [
     { name: "Home", href: "/" },
     { name: "Over ons", href: "/overons" },
     { name: "Merken", href: "/merken" },
     { name: "Contact", href: "/contact" },
-  ]
+  ];
 
   return (
-    <nav className="flex items-center justify-between p-8 shadow-md bg-[#EDBCA4]">
+    <nav className="flex items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
       {/* Logo */}
-      
+
       <Link href="/" className="text-xl font-bold">
         Koncept K
       </Link>
-      <Image
-        src="/logo.png"
-        alt="Logo"
-        width={100}
-        height={100}
-        className="mr-4"
-      />
+      <Image src="/logo.png" alt="Logo" width={100} height={100} className="py-2" />
       {/* Menú Desktop */}
-      <div className="hidden md:flex space-x-6">
-       
+      <div className="hidden md:flex space-x-4">
         {menu.map((item) => (
           <Link
             key={item.name}
             href={item.href}
-            className="text-gray-600 hover:text-gray-800"
+            className={`hover:text-gray-800 font-bold mr-4 transition duration-700 hover:scale-110  ${
+              pathname === item.href ? "text-blue-600 border-b-2 border-b-blue-700 origin-center" : "text-gray-600"
+            }`}
           >
             {item.name}
           </Link>
-       ))}
-     
+        ))}
       </div>
 
       {/* Menú Móvil */}
       <div className="md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             {menu.map((item) => (
-              <DropdownMenuItem key={item.name}>
-                <Link href={item.href}>{item.name}</Link>
+              <DropdownMenuItem
+                key={item.name}
+                className={pathname === item.href ? "bg-blue-50" : ""}
+              >
+                <Link
+                  href={item.href}
+                  className={`w-full ${
+                    pathname === item.href ? "text-blue-600" : "text-gray-600"
+                  }`}
+                >
+                  {item.name}
+                </Link>
               </DropdownMenuItem>
             ))}
-           
-            
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </nav>
   );
 }
-
