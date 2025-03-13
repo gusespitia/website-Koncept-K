@@ -24,9 +24,16 @@ export default function Navbar() {
 
       {/* Menú Desktop */}
       <div className="hidden md:flex space-x-6">
-        <Link href="/" className="hover:text-gray-600">Inicio</Link>
-        <Link href="/productos" className="hover:text-gray-600">Productos</Link>
-        <Link href="/contacto" className="hover:text-gray-600">Contacto</Link>
+       
+        {menu.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            {item.name}
+          </Link>
+       ))}
      
       </div>
 
