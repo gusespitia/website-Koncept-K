@@ -39,7 +39,7 @@ export default function Navbar() {
             key={item.name}
             href={item.href}
             className={`hover:text-gray-800 font-bold mr-4 transition duration-700 hover:scale-110  ${
-              pathname === item.href ? "text-blue-600 border-b-2 border-b-blue-700 origin-center" : "text-gray-600"
+              pathname === item.href ? "text-blue-600 border-b-2 border-b-blue-700" : "text-gray-600"
             }`}
           >
             {item.name}
