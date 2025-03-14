@@ -30,7 +30,9 @@ export default function Navbar() {
       <Link href="/" className="text-xl font-bold">
         Koncept K
       </Link>
+      <Link href="/">
       <Image src="/logo.png" alt="Logo" width={100} height={100} className="py-2 justify-self-center" />
+      </Link>
       {/* Menú Desktop */}
       <div className="hidden md:flex space-x-4 justify-end">
         {menu.map((item) => (
