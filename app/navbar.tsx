@@ -31,7 +31,13 @@ export default function Navbar() {
         Koncept K
       </Link>
       <Link href="/">
-      <Image src="/logo.png" alt="Logo" width={100} height={100} className="py-2 justify-self-center" />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={100}
+          height={100}
+          className="py-2 justify-self-center"
+        />
       </Link>
       {/* Menú Desktop */}
       <div className="hidden md:flex space-x-4 justify-end">
@@ -40,7 +46,9 @@ export default function Navbar() {
             key={item.name}
             href={item.href}
             className={`hover:text-gray-800 font-bold mr-4 transition duration-700 hover:scale-110  ${
-              pathname === item.href ? "text-blue-600 border-b-2 border-b-blue-700" : "text-gray-600"
+              pathname === item.href
+                ? "text-blue-600 border-b-2 border-b-blue-700"
+                : "text-gray-600"
             }`}
           >
             {item.name}
@@ -52,7 +60,7 @@ export default function Navbar() {
       <div className="md:hidden flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button 
+            <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
