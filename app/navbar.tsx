@@ -25,15 +25,14 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="flex items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
+    <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
       {/* Logo */}
-
       <Link href="/" className="text-xl font-bold">
         Koncept K
       </Link>
-      <Image src="/logo.png" alt="Logo" width={100} height={100} className="py-2" />
+      <Image src="/logo.png" alt="Logo" width={100} height={100} className="py-2 justify-self-center" />
       {/* Menú Desktop */}
-      <div className="hidden md:flex space-x-4">
+      <div className="hidden md:flex space-x-4 justify-end">
         {menu.map((item) => (
           <Link
             key={item.name}
@@ -48,10 +47,10 @@ export default function Navbar() {
       </div>
 
       {/* Menú Móvil */}
-      <div className="md:hidden">
+      <div className="md:hidden flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
+            <Button 
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
