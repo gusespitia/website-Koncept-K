@@ -15,7 +15,7 @@ export const send = async (emailFormData: z.infer<typeof formSchema>) => {
       from: `Acme <${process.env.RESEND_FROM_EMAIL}>`,
       to: [emailFormData.email],
       subject: 'Kconcept contact form',
-      react: EmailTemplate({ firstName: emailFormData.firstName }),
+      react:await EmailTemplate({ firstName: emailFormData.firstName }),
     });
 
     if (userError) {
