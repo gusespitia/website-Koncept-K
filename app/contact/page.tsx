@@ -90,7 +90,7 @@ export const page = () => {
               </svg>
               <span>@koncept_.k</span>
             </Link>
-            <Link href={"https://www.instagram.com/koncept_.k/"}>
+            <Link href={"https://www.facebook.com/share/1CZ1jvwhDc/"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
