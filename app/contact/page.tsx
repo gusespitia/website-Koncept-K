@@ -6,7 +6,7 @@ import { PhoneCall, MapPinHouse } from "lucide-react";
 
 export const page = () => {
   return (
-    <div className="grid place-items-center grid-cols-2">
+    <div className="grid place-items-center grid-cols-2  ">
       <ContactForm />
       <div>
         <Image
@@ -14,24 +14,36 @@ export const page = () => {
           alt="contact"
           width={500}
           height={500}
-          className="rounded-3xl"
+          className="rounded-3xl mb-8"
         ></Image>
-        <div className="grid grid-cols-2 gap-4 p-4">
+        <p>Koncept K.</p>
+        <hr className="" />
+        <div className="grid grid-cols-2 gap-4 p-4 items-start">
           <div className="justify-items-right space-y-1">
-            <p>Koncept K.</p>
             <div className="flex gap-2">
-              <MapPinHouse />
-              <p>Statiestraat 135</p>
+              <MapPinHouse size={18} />
+              <Link
+                href="https://www.google.com/maps/search/?api=1&query=Statiestraat+135,+2600+Berchem"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                <p>Statiestraat 135</p>
+                <span className="justify-self-center ">2600 Berchem</span>
+              </Link>
             </div>
-            <p>2600 Berchem</p>
 
             <div className="flex gap-2">
-              <PhoneCall />
+              <PhoneCall size={18} />
               <span>+32 471 96 77 25</span>
             </div>
           </div>
+
           <div>
-            <Link href="https://www.instagram.com/koncept_.k/" className="flex">
+            <Link
+              href="https://www.instagram.com/koncept_.k/"
+              className="flex gap-2"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
@@ -90,7 +102,10 @@ export const page = () => {
               </svg>
               <span>@koncept_.k</span>
             </Link>
-            <Link href={"https://www.facebook.com/share/1CZ1jvwhDc/"}>
+            <Link
+              href={"https://www.facebook.com/share/1CZ1jvwhDc/"}
+              className="flex gap-2"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
@@ -119,6 +134,7 @@ export const page = () => {
                   d="M26.707,29.301h5.176l0.813-5.258h-5.989v-2.874c0-2.184,0.714-4.121,2.757-4.121h3.283V12.46 c-0.577-0.078-1.797-0.248-4.102-0.248c-4.814,0-7.636,2.542-7.636,8.334v3.498H16.06v5.258h4.948v14.452 C21.988,43.9,22.981,44,24,44c0.921,0,1.82-0.084,2.707-0.204V29.301z"
                 ></path>
               </svg>
+              <span> Koncept K.</span>
             </Link>
           </div>
         </div>
