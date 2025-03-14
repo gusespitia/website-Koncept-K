@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { PhoneCall, MapPinHouse } from "lucide-react";
 
-export const page = () => {
+export default function Page() {
+
   return (
     <div className="grid place-items-center grid-cols-2  ">
       <ContactForm />
@@ -142,4 +143,4 @@ export const page = () => {
     </div>
   );
 };
-export default page;
+
