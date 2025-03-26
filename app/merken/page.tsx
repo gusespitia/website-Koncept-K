@@ -3,27 +3,24 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image"; // Reemplaza con tu Cloud Name
+const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
+
+interface Brand {
+  id: number;
+  brand_name: string;
+  brand_visible: boolean;
+  brand_description: string | null;
+  brand_slug: string;
+  brand_image?: {
+    url: string;
+  };
+}
 
 const BrandsPage = () => {
-  interface Brand {
-    id: number;
-    brand_name: string;
-    brand_visible: boolean;
-    brand_description: string | null;
-    brand_slug: string;
-    brand_image: {
-      url: string;
-      formats?: {
-        thumbnail?: { url: string };
-        medium?: { url: string };
-      };
-      provider: string;
-    };
-  }
-
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -32,12 +29,13 @@ const BrandsPage = () => {
           "http://localhost:1337/api/brands?populate=brand_image"
         );
         const data = await response.json();
-        console.log("API Response:", data); // 👀 Verifica qué URLs devuelve Strapi
-        if (data && data.data) {
+        if (data?.data) {
           setBrands(data.data);
         }
       } catch (error) {
         console.error("Error fetching brands:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -46,42 +44,42 @@ const BrandsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#EDBCA4] p-6">
-      {brands.length > 0 ? (
-        <section className="mb-12 bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-center mb-4">Brands</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {brands.map((brand) => {
-              // Asegurar URL de Cloudinary
-              const imageUrl = brand.brand_image?.url
-                ? brand.brand_image.url.startsWith("http")
-                  ? brand.brand_image.url // Si ya es una URL completa, úsala
-                  : `${CLOUDINARY_BASE_URL}${brand.brand_image.url}` // Si es relativa, conviértela
-                : "/logo.png";
-              console.log(imageUrl);
+      <section className="mb-12 bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-4">Brands</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <Skeleton key={index} className="h-32 w-full rounded-lg" />
+              ))
+            : brands.map((brand) => {
+                const imageUrl = brand.brand_image?.url
+                  ? brand.brand_image.url.startsWith("http")
+                    ? brand.brand_image.url
+                    : `${CLOUDINARY_BASE_URL}${brand.brand_image.url}`
+                  : "/logo.png";
 
-              return (
-                <div
-                  key={brand.id}
-                  className="grid justify-center items-center border p-4 rounded-md gap-1"
-                > <Link href={`/merken/${brand.brand_slug}`}>
-                  <Image
-                    src={imageUrl}
-                    alt={brand.brand_name}
-                    width={60}
-                    height={60}
-                    className=" rounded-full shadow-md shadow-accent-foreground object-cover h-auto w-auto mb-2 hover:scale-3d hover:scale-105 transition-all duration-300 ease-in-out"
-                  />
-                 
-                    <span>{brand.brand_name}</span>
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ) : (
-        <p>No brands found.</p>
-      )}
+                return (
+                  <div
+                    key={brand.id}
+                    className="flex flex-col items-center border p-4 rounded-lg shadow-md bg-white hover:scale-105 transition-transform duration-300 ease-in-out"
+                  >
+                    <Link href={`/merken/${brand.brand_slug}`} className="text-center">
+                      <Image
+                        src={imageUrl}
+                        alt={brand.brand_name}
+                        width={80}
+                        height={80}
+                        className="rounded-full object-cover shadow-md hover:scale-110 transition-transform duration-300"
+                      />
+                      <h3 className="mt-3 text-lg font-semibold text-gray-900">
+                        {brand.brand_name}
+                      </h3>
+                    </Link>
+                  </div>
+                );
+              })}
+        </div>
+      </section>
     </div>
   );
 };
