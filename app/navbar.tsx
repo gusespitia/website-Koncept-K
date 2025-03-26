@@ -27,8 +27,8 @@ export default function Navbar() {
   return (
     <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
       {/* Logo */}
-      <Link href="/" className="text-xl font-bold">
-        Koncept K
+      <Link href="/" className="text-xl ">
+        <span className="font-bold">K</span>oncept <span className="font-bold">K.</span>
       </Link>
       <Link href="/">
         <Image
