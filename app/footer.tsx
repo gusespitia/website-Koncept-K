@@ -75,7 +75,7 @@ export default function FooterSection({
           <div className="flex flex-col space-y-4">
             <div className="flex items-center space-x-3">
               {logo}
-              <h3 className="text-xl font-bold text-gray-800">{name}</h3>
+              <p ><span className="font-bold">K</span>oncept <span className="font-bold">K.</span></p>
             </div>
           </div>
 
