@@ -70,7 +70,7 @@ const BrandsPage = () => {
                         alt={brand.brand_name}
                         width={80}
                         height={80}
-                        className="rounded-full object-cover shadow-xl hover:scale-110 transition-transform duration-300 h-24 w-24"
+                        className="rounded-full object-cover shadow-xl hover:scale-110 transition-transform duration-300 h-24 w-20"
                       />
                       <h3 className="mt-3 text-lg font-semibold text-gray-900">
                         {brand.brand_name}
