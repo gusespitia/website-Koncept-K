@@ -43,8 +43,8 @@ const BrandsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#EDBCA4] p-6">
-      <section className="mb-12 bg-white p-6 rounded-lg shadow-lg">
+    <div className=" bg-[#EDBCA4] p-6 rounded-md">
+      <section className="mb-12 bg-white p-6 rounded-lg shadow-lg mx-8 py-6 ">
         <h2 className="text-2xl font-bold text-center mb-4">Brands</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {loading
@@ -59,23 +59,24 @@ const BrandsPage = () => {
                   : "/logo.png";
 
                 return (
-                  <div
+                  <Link
+                    href={`/merken/${brand.brand_slug}`}
+                    className="text-center"
                     key={brand.id}
-                    className="flex flex-col items-center border p-4 rounded-lg shadow-md bg-white hover:scale-105 transition-transform duration-300 ease-in-out"
                   >
-                    <Link href={`/merken/${brand.brand_slug}`} className="text-center">
+                    <div className="flex flex-col items-center border p-4 rounded-lg shadow-md bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
                       <Image
                         src={imageUrl}
                         alt={brand.brand_name}
                         width={80}
                         height={80}
-                        className="rounded-full object-cover shadow-md hover:scale-110 transition-transform duration-300"
+                        className="rounded-full object-cover shadow-xl hover:scale-110 transition-transform duration-300 h-24 w-24"
                       />
                       <h3 className="mt-3 text-lg font-semibold text-gray-900">
                         {brand.brand_name}
                       </h3>
-                    </Link>
-                  </div>
+                    </div>{" "}
+                  </Link>
                 );
               })}
         </div>

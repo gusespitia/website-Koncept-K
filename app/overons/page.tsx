@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <div className="relative min-h-screen bg-[#EDBCA4] flex flex-col lg:grid lg:grid-cols-2 items-start p-4 lg:p-4 gap-4 rounded-2xl my-8">
+    <div className="relative min-h-screen bg-[#EDBCA4] flex flex-col lg:grid lg:grid-cols-2 items-start p-4 lg:p-4 gap-4 rounded-md ">
       {/* Main Image on the left (for larger screens) */}
       <div className="hidden lg:flex justify-center items-center row-span-2 pr-8 -ml-2 ">
         <Image
