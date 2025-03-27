@@ -27,7 +27,7 @@ const Home = () => {
     const fetchBrands = async () => {
       try {
         const response = await fetch(
-          "http://localhost:1337/api/products?populate=product_image"
+          "http://localhost:1337/api/products?populate=product_image&filters[product_feature][$eq]=true#"
         );
         const data = await response.json();
         if (data?.data) {
