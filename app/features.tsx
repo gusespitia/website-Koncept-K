@@ -44,8 +44,8 @@ const Home = () => {
   }, []);
 
   return (
-    <section className="w-full max-w-8xl mx-auto px-4 absolute inset-0">
-      <h1 className="text-3xl font-bold mb-4 text-center -mt-3">
+    <section className="w-full max-w-8xl mx-auto px-4 absolute inset-0 row-start-1 col-span-2">
+      <h1 className="text-3xl font-bold mb-4 text-center mt-3">
         Discover our new products
       </h1>
       {loading && (
