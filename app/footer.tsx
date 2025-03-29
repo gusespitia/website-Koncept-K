@@ -5,12 +5,12 @@ import { ReactNode } from "react";
 
 const Logo = () => {
   return (
-    <Image 
-      src="/logo.png" 
-      alt="logo" 
-      width={54} 
+    <Image
+      src="/logo.png"
+      alt="logo"
+      width={54}
       height={54}
-      className="w-10 h-10 md:w-12 md:h-12"
+      className="w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20"
     />
   );
 };
@@ -35,7 +35,7 @@ interface FooterProps {
 
 export default function FooterSection({
   logo = <Logo />,
-  name = "Koncept K",
+
   columns = [
     {
       title: "Categorieën",
@@ -72,17 +72,14 @@ export default function FooterSection({
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Logo y nombre */}
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-center space-x-3">
-              {logo}
-              <p ><span className="font-bold">K</span>oncept <span className="font-bold">K.</span></p>
-            </div>
+          <div className="flex flex-col space-y-4 w-20">
+            <div className="flex items-center space-x-3">{logo}</div>
           </div>
 
           {/* Columnas dinámicas */}
           {columns.map((column, index) => (
             <div key={index} className="space-y-3">
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-sm font-semibold text-gray-800">
                 {column.title}
               </h3>
               <ul className="space-y-2">
@@ -90,7 +87,7 @@ export default function FooterSection({
                   <li key={linkIndex}>
                     <a
                       href={link.href}
-                      className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                      className="text-gray-600 hover:text-gray-900 transition-colors duration-200 text-sm"
                     >
                       {link.text}
                     </a>
@@ -102,18 +99,16 @@ export default function FooterSection({
         </div>
 
         {/* Bottom section */}
-        <div className="border-t border-gray-200 pt-6">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="text-sm text-gray-600">
-              {copyright}
-            </div>
+        <div className="border-t border-gray-200 pt-1 ">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-1 md:space-y-0">
+            <div className="text-xs text-gray-600">{copyright}</div>
 
             <div className="flex items-center space-x-6">
               {policies.map((policy, index) => (
                 <a
                   key={index}
                   href={policy.href}
-                  className="text-sm text-gray-600 hover:text-gray-900"
+                  className=" text-gray-600 hover:text-gray-900 text-xs"
                 >
                   {policy.text}
                 </a>

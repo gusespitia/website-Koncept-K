@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
       {/* Logo */}
-      <Link href="/" className="text-xl ">
+      <Link href="/" className="text-xl ml-4">
         <span className="font-bold">K</span>oncept <span className="font-bold">K.</span>
       </Link>
       <Link href="/">
@@ -47,7 +47,7 @@ export default function Navbar() {
             href={item.href}
             className={`hover:text-gray-800 font-bold mr-4 transition duration-700 hover:scale-110  ${
               pathname === item.href
-                ? "text-blue-600 border-b-2 border-b-blue-700"
+                ? "text-white border-b-2 border-b-white transition duration-700"
                 : "text-gray-600"
             }`}
           >
