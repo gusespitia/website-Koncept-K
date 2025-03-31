@@ -11,27 +11,28 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-interface Product {
+interface Brand {
   id: number;
-  product_name: string;
-  product_image?: [{ url: string; name: string }];
+  brand_name: string;
+  brand_image?: { url: string; name: string };
 }
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
 const Home = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBrands = async () => {
       try {
         const response = await fetch(
-          "http://localhost:1337/api/products?populate=product_image&filters[product_feature][$eq]=true#"
+          "http://localhost:1337/api/brands?populate=brand_image"
         );
         const data = await response.json();
         if (data?.data) {
-          setProducts(data.data);
+          setBrands(data.data);
+          console.log(data.data);
         }
       } catch (error) {
         console.error("Error fetching brands:", error);
@@ -45,8 +46,8 @@ const Home = () => {
 
   return (
     <section className="w-full max-w-8xl mx-auto px-4 absolute inset-0 row-start-1 col-span-2">
-      <h1 className="text-3xl font-bold mb-4 text-center mt-3">
-        Discover our new products
+      <h1 className="text-2xl font-bold text-center mt-3">
+        Discover our brands
       </h1>
       {loading && (
         <div className="flex justify-center ">
@@ -86,33 +87,33 @@ const Home = () => {
         className="w-full overflow-hidden"
       >
         <CarouselContent className="flex mx-auto">
-          {products.slice(0).map((product) => {
-            const imageUrl = product.product_image?.[0]?.url
-              ? product.product_image[0].url.startsWith("http")
-                ? product.product_image[0].url
-                : `${CLOUDINARY_BASE_URL}${product.product_image[0].url}`
+          {brands.slice(0).map((brand) => {
+            const imageUrl = brand.brand_image?.url
+              ? brand.brand_image.url.startsWith("http")
+                ? brand.brand_image.url
+                : `${CLOUDINARY_BASE_URL}${brand.brand_image.url}`
               : "/logo.png";
 
             return (
               <CarouselItem
-                key={product.id}
+                key={brand.id}
                 className="basis-1/7 transition-transform duration-500 hover:scale-105 cursor-pointer select-none w-[30%] min-w-[200px]"
                 style={{ perspective: "1000px" }} // 🔥 Para efectos 3D
               >
-                <div className="relative transform transition-transform hover:rotate-y-[15deg]">
+                <div className="relative transform transition-transform flex flex-col items-center bg-white rounded-lg shadow-lg w-full mx-auto my-4 hover:bg-gray-50 hover:scale-102 transution-all duration-700 ease-in-out cursor-pointer p-2 ">
                   {/* Imagen del producto */}
                   <Image
-                    width={500}
-                    height={500}
+                    width={300}
+                    height={200}
                     src={imageUrl}
                     priority
-                    alt={product.product_name}
-                    className="w-auto h-auto object-cover rounded-lg"
+                    alt={brand.brand_name}
+                    className="w-30 h-20 object-cover rounded-lg"
                   />
                   {/* Nombre del producto sobre la imagen */}
-                  <div className="absolute inset-0 flex items-center justify-center  bg-opacity-40">
-                    <p className="text-white text-lg font-semibold text-center px-2 no-select cursor-pointer">
-                      {product.product_name}
+                  <div className="mx-auto mt-1">
+                    <p className="text-black text-sm font-semibold no-select cursor-pointer">
+                      {brand.brand_name}
                     </p>
                   </div>
                 </div>
