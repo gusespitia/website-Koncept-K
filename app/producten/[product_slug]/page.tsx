@@ -11,6 +11,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
@@ -29,6 +31,9 @@ const Page = () => {
   const slug = params.product_slug as string;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  
 
   const formatPrice = (price: number | undefined) => {
     if (price === undefined) return "€0,00";
@@ -57,6 +62,13 @@ const Page = () => {
 
     fetchProduct();
   }, [slug]);
+
+  const openLightbox = (index: number) => {
+    setSelectedImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  
 
   if (loading) {
     return (
@@ -117,58 +129,65 @@ const Page = () => {
     img.url.startsWith("http") ? img.url : `${CLOUDINARY_BASE_URL}${img.url}`
   ) || ["/logo.png"];
 
-  return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          {/* Product Header */}
-          <div className="border-b border-gray-200 p-6 text-center">
-            <p className="text-2xl md:text-3xl font-bold text-[var(--color-store)]">
-              {product.product_name}
-            </p>
-          </div>
 
-          {/* Product Content */}
-          <div className="flex flex-col lg:flex-row">
-            {/* Image Gallery */}
-            <div className="lg:w-1/2 p-6">
-              {images.length > 1 ? (
-                <Carousel className="w-full">
-                  <CarouselContent>
-                    {images.map((imgUrl, index) => (
-                      <CarouselItem key={index}>
-                        <div className="relative aspect-square overflow-hidden rounded-lg">
-                          <Image
-                            src={imgUrl}
-                            alt={`${product.product_name} - Image ${index + 1}`}
-                            fill
-                            className="object-cover transition-transform duration-300 hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            priority={index === 0}
-                          />
-                          <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                            {index + 1}/{images.length}
-                          </div>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="left-4 hidden sm:flex" />
-                  <CarouselNext className="right-4 hidden sm:flex" />
-                </Carousel>
-              ) : (
-                <div className="relative aspect-square overflow-hidden rounded-lg">
-                  <Image
-                    src={images[0]}
-                    alt={product.product_name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    priority
-                  />
-                </div>
-              )}
+    return (
+      <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            {/* Product Header */}
+            <div className="border-b border-gray-200 p-6 text-center">
+              <p className="text-2xl md:text-3xl font-bold text-[var(--color-store)]">
+                {product.product_name}
+              </p>
             </div>
+  
+            {/* Product Content */}
+            <div className="flex flex-col lg:flex-row">
+              {/* Image Gallery */}
+              <div className="lg:w-1/3 p-6 ">
+                {images.length > 1 ? (
+                  <Carousel className="w-full ">
+                    <CarouselContent>
+                      {images.map((imgUrl, index) => (
+                        <CarouselItem key={index}>
+                          <div 
+                            className="relative aspect-square overflow-hidden rounded-lg cursor-zoom-in group "
+                            onClick={() => openLightbox(index)}
+                          >
+                            <Image
+                              src={imgUrl}
+                              alt={`${product.product_name} - Image ${index + 1}`}
+                              fill
+                              className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw "
+                              priority={index === 0}
+                            />
+                            <div className="absolute bottom-1 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                              {index + 1}/{images.length}
+                            </div>
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-1 hidden sm:flex" />
+                    <CarouselNext className="right-1 hidden sm:flex" />
+                  </Carousel>
+                ) : (
+                  <div 
+                    className="relative aspect-square overflow-hidden rounded-lg cursor-zoom-in group"
+                    onClick={() => openLightbox(0)}
+                  >
+                    <Image
+                      src={images[0]}
+                      alt={product.product_name}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority
+                    />
+                  </div>
+                )}
+              </div>
 
             {/* Product Details */}
             <div className="lg:w-1/2 p-6 border-t lg:border-t-0 lg:border-l border-gray-200">
@@ -245,6 +264,37 @@ const Page = () => {
           </Link>
         </div>
       </div>
+
+      {/* Lightbox Dialog */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-4xl p-0 bg-white/80 border-none">
+          <div className="relative w-full h-full ">
+            <Carousel
+              className="w-full "
+              opts={{ startIndex: selectedImageIndex }}
+            >
+              <CarouselContent>
+                {images.map((imgUrl, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative aspect-square ">
+                      <Image
+                        src={imgUrl}
+                        alt={`${product.product_name} - Image ${index + 1}`}
+                        fill
+                        className="object-contain "
+                        sizes="100vw"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-4 bg-black/50 text-white hover:bg-black/70" />
+              <CarouselNext className="right-4 bg-black/50 text-white hover:bg-black/70" />
+            </Carousel>
+         
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
