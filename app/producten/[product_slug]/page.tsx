@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, JSX } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
@@ -12,7 +13,8 @@ interface Product {
   product_name: string;
   product_price: number;
   product_slug: string;
-  product_description: string;
+  product_description_general: string; // Rich text (HTML)
+  product_description: string; // Texto plano
   product_image?: [{ url: string; name: string }];
 }
 
@@ -21,6 +23,19 @@ const Page: React.FC = () => {
   const slug = params.product_slug as string;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+ 
+  // Componente para renderizar HTML seguro
+  const HTMLRenderer = ({ content }: { content: JSX.Element }) => {
+    return <div>{content}</div>;
+  };
+
+  const formatPrice = (price: number | undefined) => {
+    if (price === undefined) return "€0,00";
+    return new Intl.NumberFormat("nl-BE", {
+      style: "currency",
+      currency: "EUR",
+    }).format(price);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,7 +58,7 @@ const Page: React.FC = () => {
   }, [slug]);
 
   return (
-    <div className="bg-[#EDBCA4] min-h-screen p-6">
+    <div className="bg-[#EDBCA4] min-h-screen p-6 rounded-sm">
       <div className="container mx-auto max-w-6xl">
         {loading ? (
           <div className="flex justify-center items-center h-screen">
@@ -61,11 +76,11 @@ const Page: React.FC = () => {
               return (
                 <div
                   key={product.id}
-                  className="bg-white rounded-xl shadow-lg p-6 md:p-8 lg:p-10"
+                  className="bg-white rounded-md shadow-lg p-6 md:p-8 lg:p-10"
                 >
                   {/* Product Header */}
                   <div className="mb-8 text-center">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+                    <h1 className="text-3xl md:text-2xl font-bold text-gray-800">
                       {product.product_name}
                     </h1>
                   </div>
@@ -84,23 +99,51 @@ const Page: React.FC = () => {
                     </div>
 
                     {/* Details Section */}
-                    <div className="lg:w-1/2 space-y-6">
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <p className="text-2xl font-bold text-indigo-600">
-                          €{product.product_price}
+                    <div className="lg:w-1/2 space-y-2">
+                      <div className="py-6 rounded-lg text-left">
+                        <p className="text-2xl font-bold text-left ">
+                          {formatPrice(product.product_price)}
                         </p>
                       </div>
 
-                      {product.product_description && (
-                        <div className="prose max-w-none">
-                          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                            Product Details
-                          </h3>
-                          <p className="text-gray-600 leading-relaxed">
-                            {product.product_description}
-                          </p>
-                        </div>
-                      )}
+                      {/* Lista con checkmarks (texto plano) */}
+                      <ul className="space-y-2  font-normal text-sm mb-6">
+                        {product.product_description}
+                      </ul>
+
+                      {/* Descripción general (rich text) */}
+                      <div className="prose max-w-none text-gray-600 text-sm">
+                        <HTMLRenderer
+                          content={
+                            <ul className="space-y-2">
+                              {product.product_description_general
+                                .split("\n")
+                                .filter((paragraph) => paragraph.trim() !== "")
+                                .map((paragraph, index) => (
+                                  <li
+                                    key={index}
+                                    className="text-gray-600 flex items-start gap-2"
+                                  >
+                                    <svg
+                                      className="flex-shrink-0 h-5 w-5 text-green-500 mt-0.5"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M5 13l4 4L19 7"
+                                      />
+                                    </svg>
+                                    {paragraph}
+                                  </li>
+                                ))}
+                            </ul>
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
