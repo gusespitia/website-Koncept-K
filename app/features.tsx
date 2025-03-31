@@ -45,7 +45,7 @@ const Home = () => {
   }, []);
 
   return (
-    <section className="w-full max-w-8xl mx-auto px-4 absolute inset-0 row-start-1 col-span-2">
+    <section className="w-full max-w-8xl mx-auto px-4  row-start-1 col-span-2">
       <h1 className="text-2xl font-bold text-center mt-3">
         Discover our brands
       </h1>
@@ -82,9 +82,15 @@ const Home = () => {
       )}
       <Carousel
         orientation="horizontal"
-        opts={{ loop: true, containScroll: "trimSnaps", dragFree: true }}
+        opts={{
+          loop: true,
+          align: "center", // Centra los elementos
+          slidesToScroll: "auto",
+          containScroll: "keepSnaps", // Evita cortar elementos
+          dragFree: true,
+        }}
         plugins={[Autoplay({ delay: 6000 })]}
-        className="w-full overflow-hidden"
+        className="w-f overflow-visible mx-auto"
       >
         <CarouselContent className="flex mx-auto">
           {brands.slice(0).map((brand) => {
@@ -107,8 +113,9 @@ const Home = () => {
                     height={200}
                     src={imageUrl}
                     priority
+                    
                     alt={brand.brand_name}
-                    className="w-30 h-20 object-cover rounded-lg"
+                    className="w-30 h-20 object-contain rounded-lg"
                   />
                   {/* Nombre del producto sobre la imagen */}
                   <div className="mx-auto mt-1">

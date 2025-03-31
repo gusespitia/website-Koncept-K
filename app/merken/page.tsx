@@ -43,45 +43,76 @@ const BrandsPage = () => {
   }, []);
 
   return (
-    <div className=" bg-[#EDBCA4] p-6 rounded-md">
-      <section className="mb-12 bg-white p-6 rounded-lg shadow-lg mx-8 py-6 ">
-        <h2 className="text-2xl font-bold text-center mb-4">Brands</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {loading
-            ? Array.from({ length: 6 }).map((_, index) => (
-                <Skeleton key={index} className="h-32 w-full rounded-lg" />
-              ))
-            : brands.map((brand) => {
-                const imageUrl = brand.brand_image?.url
-                  ? brand.brand_image.url.startsWith("http")
-                    ? brand.brand_image.url
-                    : `${CLOUDINARY_BASE_URL}${brand.brand_image.url}`
-                  : "/logo.png";
+    <section className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8 rounded-md bg-white shadow-2xl shadow-[#EDBCA4]/70">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-4">
+          <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl">
+            Our Brands
+          </h1>
+          <p className="my-3 text-xl text-gray-600 max-w-2xl mx-auto">
+            Discover the premium brands we collaborate with
+          </p>
+        </div>
 
-                return (
-                  <Link
-                    href={`/merken/${brand.brand_slug}`}
-                    className="text-center"
-                    key={brand.id}
-                  >
-                    <div className="flex flex-col items-center border p-4 rounded-lg shadow-md bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
-                      <Image
-                        src={imageUrl}
-                        alt={brand.brand_name}
-                        width={80}
-                        height={80}
-                        className="rounded-full object-cover shadow-xl hover:scale-110 transition-transform duration-300 h-24 w-20"
-                      />
-                      <h3 className="mt-3 text-lg font-semibold text-gray-900">
+        {/* Brands Grid */}
+        <div className=" p-4 sm:p-8 rounded-xl ">
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <Skeleton className="h-32 w-full rounded-lg" />
+                  <Skeleton className="h-4 w-3/4 mt-3 rounded" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-6 ">
+              {brands
+                .slice()
+                .sort((a, b) => a.brand_name.localeCompare(b.brand_name))
+                .map((brand) => {
+                  const imageUrl = brand.brand_image?.url
+                    ? brand.brand_image.url.startsWith("http")
+                      ? brand.brand_image.url
+                      : `${CLOUDINARY_BASE_URL}${brand.brand_image.url}`
+                    : "/logo.png";
+
+                  return (
+                    <Link
+                      href={`/merken/${brand.brand_slug}`}
+                      key={brand.id}
+                      className="group"
+                    >
+                      <div className="flex flex-col items-center p-2  border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-300 h-30 w-30 ">
+                        <div className="relative w-full aspect-square mb-4 overflow-hidden ">
+                          <Image
+                            src={imageUrl}
+                            alt={brand.brand_name}
+                            fill
+                            className="object-contain transition-transform duration-300 group-hover:scale-105 "
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                          />
+                        </div>
+                      </div>
+                      <h3 className="text-xs font-normal text-gray-700 text-center group-hover:font-semibold transition-all mt-1  duration-500">
                         {brand.brand_name}
                       </h3>
-                    </div>{" "}
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+            </div>
+          )}
         </div>
-      </section>
-    </div>
+
+        {/* Empty State */}
+        {!loading && brands.length === 0 && (
+          <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+            <p className="text-gray-500">No brands available at the moment.</p>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

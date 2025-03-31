@@ -25,7 +25,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[#EDBCA4]">
+    <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[var(--color-store)]">
       {/* Logo */}
       <Link href="/" className="text-xl ml-4">
         <span className="font-bold">K</span>oncept <span className="font-bold">K.</span>

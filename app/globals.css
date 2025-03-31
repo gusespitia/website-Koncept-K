@@ -46,6 +46,7 @@
 }
 
 :root {
+  --color-store: #EDBCA4;
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
@@ -125,3 +126,11 @@
   }
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #333333
+}

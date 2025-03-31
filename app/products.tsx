@@ -18,6 +18,14 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [visibleCount, setVisibleCount] = useState(5);
 
+  const formatPrice = (price: number | undefined) => {
+    if (price === undefined) return "€0,00";
+    return new Intl.NumberFormat("nl-BE", {
+      style: "currency",
+      currency: "EUR",
+    }).format(price);
+  };
+
   const loadMoreProducts = useCallback(() => {
     setVisibleCount((prev) => prev + 5);
   }, []);
@@ -40,8 +48,8 @@ const Products = () => {
   }, []);
 
   return (
-    <section className="row-start-3 row-end-4 col-span-1 lg:col-span-2 p-4 mb-16 mt-10">
-      <h1 className="text-center text-3xl font-bold mb-8 text-gray-800">
+    <section className="row-start-3 row-end-4 col-span-1 lg:col-span-2 mb-28">
+      <h1 className="text-center text-3xl font-bold mb-6 text-gray-800">
         Productos
       </h1>
 
@@ -58,35 +66,34 @@ const Products = () => {
                 key={product.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 transform hover:scale-105 cursor-pointer flex flex-col"
               >
-                <div className="relative w-full h-56">
-                  <Image
-                    src={
-                      product.product_image?.[0]?.url
-                        ? product.product_image[0].url.startsWith("http")
-                          ? product.product_image[0].url
-                          : `${CLOUDINARY_BASE_URL}${product.product_image[0].url}`
-                        : "/logo.png"
-                    }
-                    alt={product.product_name}
-                    width={400}
-                    height={400}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4 text-center">
-                  <h2 className="text-lg font-semibold text-gray-900 truncate">
-                    {product.product_name}
-                  </h2>
-                  <p className="text-md font-bold text-indigo-600 mt-1">
-                    ${product.product_price}
-                  </p>
-                        {/* Botón "Ver más" */}
-                      <Link href={`/producten/${product.product_slug}`}>
-                      <button className="mt-3 px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg shadow-md hover:bg-indigo-600 transition cursor-pointer">
-                    Ver más
-                  </button>
-                      </Link>
-                </div>
+                <Link href={`/producten/${product.product_slug}`}>
+                  <div className="relative w-full h-56">
+                    <Image
+                      src={
+                        product.product_image?.[0]?.url
+                          ? product.product_image[0].url.startsWith("http")
+                            ? product.product_image[0].url
+                            : `${CLOUDINARY_BASE_URL}${product.product_image[0].url}`
+                          : "/logo.png"
+                      }
+                      alt={product.product_name}
+                      width={400}
+                      height={400}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <div className="p-4 text-center">
+                    <h2 className="text-sm font-semibold text-gray-900 truncate mb-1">
+                      {product.product_name}
+                    </h2>
+
+                    <p className="text-xs  text-center ">
+                      {formatPrice(product.product_price)}
+                    </p>
+
+                    {/* Botón "Ver más" */}
+                  </div>
+                </Link>
               </div>
             ))
           )}
@@ -97,7 +104,7 @@ const Products = () => {
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full pt-8">
             <button
               onClick={loadMoreProducts}
-              className="bg-indigo-500 text-white font-bold uppercase text-sm px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+              className="bg-[var(--color-store)] text-gray-600 hover:text-gray-900 duration-200 text-md  uppercase  px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
             >
               See More Products
             </button>

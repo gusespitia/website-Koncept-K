@@ -45,7 +45,7 @@ const Page: React.FC = () => {
   }, [slug]); // Se actualiza cuando cambia el slug
 
   return (
-    <div className="bg-[#EDBCA4] p-6 rounded-md">
+    <div className="bg-[var(--color-store)] p-6 rounded-md">
       <div className="container mx-auto ">
         {loading && (
           <div className="flex justify-center ">

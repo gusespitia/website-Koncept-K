@@ -1,19 +1,20 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 import { useState, useEffect } from "react";
 
 interface Category {
   id: number;
   category_name: string;
+  category_slug: string;
   category_image?: { url: string; name: string };
-
 }
 
 const Categories = () => {
-  const [categories, setCategories]  = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
@@ -22,10 +23,9 @@ useEffect(() => {
         const data = await response.json();
         if (data?.data) {
           setCategories(data.data);
-          console.log(data.data);
         }
       } catch (error) {
-        console.error("Error fetching brands:", error);
+        console.error("Error fetching categories:", error);
       } finally {
         setLoading(false);
       }
@@ -33,22 +33,28 @@ useEffect(() => {
 
     fetchCategories();
   }, []);
+
   return (
-    <div className="w-full max-w-8xl mx-auto row-start-2 col-span-2 ">
-      <ul className="flex gap-10 justify-center cursor-pointer ">
-       {loading ? (
-        <p>Loading...</p>
+    <div className="w-full max-w-8xl mx-auto py-4">
+      {loading ? (
+        <div className="flex justify-center">
+          <p className="text-gray-600">Loading categories...</p>
+        </div>
       ) : (
-        categories.map((category) => (
-        <ul key={category.id}>
-           <li className="font-serif border-1 border-black px-4 py-1 rounded-xs">
-          {category.category_name}
-        </li>
+        <ul className="flex flex-wrap gap-4 justify-center"> {/* Solo un <ul> */}
+          {categories.map((category) => (
+            <li key={category.id}> {/* Cada categoría es un <li> */}
+              <Link
+                href={`/categories/${category.category_slug}`}
+                className="inline-block px-4 py-2 bg-white text-gray-800 rounded-md border border-gray-200 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 font-medium"
+              
+              >
+                {category.category_name}
+              </Link>
+            </li>
+          ))}
         </ul>
-      ))
       )}
-    
-      </ul>
     </div>
   );
 };

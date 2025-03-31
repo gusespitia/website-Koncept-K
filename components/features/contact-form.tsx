@@ -140,7 +140,7 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-[#EDBCA4]">
+              <Button type="submit" className="w-full bg-[var(--color-store)]">
                 Submit
               </Button>
             </form>

@@ -1,10 +1,8 @@
 "use client";
-
 import React, { useState, useEffect, JSX } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
@@ -13,8 +11,8 @@ interface Product {
   product_name: string;
   product_price: number;
   product_slug: string;
-  product_description_general: string; // Rich text (HTML)
-  product_description: string; // Texto plano
+  product_description: string;
+  product_description_general?: string; // Ahora es opcional con el signo ?
   product_image?: [{ url: string; name: string }];
 }
 
@@ -23,7 +21,7 @@ const Page: React.FC = () => {
   const slug = params.product_slug as string;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
- 
+
   // Componente para renderizar HTML seguro
   const HTMLRenderer = ({ content }: { content: JSX.Element }) => {
     return <div>{content}</div>;
@@ -58,14 +56,14 @@ const Page: React.FC = () => {
   }, [slug]);
 
   return (
-    <div className="bg-[#EDBCA4] min-h-screen p-6 rounded-sm">
-      <div className="container mx-auto max-w-6xl">
+    <div className=" min-h-screen p-6 rounded-md ">
+      <div className="container mx-auto max-w-6xl ">
         {loading ? (
           <div className="flex justify-center items-center h-screen">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-8 ">
             {products.map((product) => {
               const imageUrl = product.product_image?.[0]?.url
                 ? product.product_image[0].url.startsWith("http")
@@ -80,9 +78,9 @@ const Page: React.FC = () => {
                 >
                   {/* Product Header */}
                   <div className="mb-8 text-center">
-                    <h1 className="text-3xl md:text-2xl font-bold text-gray-800">
+                    <p className="text-3xl md:text-3xl font-bold text-[var(--color-store)]">
                       {product.product_name}
-                    </h1>
+                    </p>
                   </div>
 
                   {/* Product Content */}
@@ -116,30 +114,44 @@ const Page: React.FC = () => {
                         <HTMLRenderer
                           content={
                             <ul className="space-y-2">
-                              {product.product_description_general
-                                .split("\n")
-                                .filter((paragraph) => paragraph.trim() !== "")
-                                .map((paragraph, index) => (
-                                  <li
-                                    key={index}
-                                    className="text-gray-600 flex items-start gap-2"
-                                  >
-                                    <svg
-                                      className="flex-shrink-0 h-5 w-5 text-green-500 mt-0.5"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
-                                    {paragraph}
-                                  </li>
-                                ))}
+                              {/* Descripción general (rich text) - Solo si existe */}
+                              {product.product_description_general && (
+                                <div className="prose max-w-none text-gray-600 text-sm">
+                                  <HTMLRenderer
+                                    content={
+                                      <ul className="space-y-2">
+                                        {product.product_description_general
+                                          .split("\n")
+                                          .filter(
+                                            (paragraph) =>
+                                              paragraph.trim() !== ""
+                                          )
+                                          .map((paragraph, index) => (
+                                            <li
+                                              key={index}
+                                              className="text-gray-600 flex items-start gap-2"
+                                            >
+                                              <svg
+                                                className="flex-shrink-0 h-5 w-5 text-green-500 mt-0.5"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth={2}
+                                                  d="M5 13l4 4L19 7"
+                                                />
+                                              </svg>
+                                              {paragraph}
+                                            </li>
+                                          ))}
+                                      </ul>
+                                    }
+                                  />
+                                </div>
+                              )}
                             </ul>
                           }
                         />
@@ -153,7 +165,7 @@ const Page: React.FC = () => {
             {/* Back Button */}
             <div className="flex justify-center mt-12">
               <Link
-                href="/merken"
+                href="/"
                 className="group inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 rounded-lg shadow-md transition-all duration-300"
               >
                 <svg
@@ -171,7 +183,7 @@ const Page: React.FC = () => {
                   />
                 </svg>
                 <span className="font-semibold text-gray-700 group-hover:text-gray-900">
-                  Back to Brands
+                  Back to Home
                 </span>
               </Link>
             </div>
