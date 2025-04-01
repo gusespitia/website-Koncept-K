@@ -34,7 +34,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:1337/api/products?populate=product_image"
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?populate=product_image`
         );
         const data = await response.json();
         if (data?.data) setProducts(data.data);

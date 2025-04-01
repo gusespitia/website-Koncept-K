@@ -17,9 +17,7 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:1337/api/categories?populate=category_image"
-        );
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}categories?populate=category_image`);
         const data = await response.json();
         if (data?.data) {
           setCategories(data.data);

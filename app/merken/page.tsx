@@ -26,7 +26,7 @@ const BrandsPage = () => {
     const fetchBrands = async () => {
       try {
         const response = await fetch(
-          "http://localhost:1337/api/brands?populate=brand_image"
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}brands?populate=brand_image`
         );
         const data = await response.json();
         if (data?.data) {
