@@ -56,7 +56,7 @@ const Page = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `http://localhost:1337/api/products?filters[product_slug][$eq]=${slug}&populate=*`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_slug][$eq]=${slug}&populate=*`
         );
         const data = await response.json();
         if (data?.data?.length > 0) {

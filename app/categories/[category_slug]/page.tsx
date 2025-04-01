@@ -33,7 +33,7 @@ const Page: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:1337/api/products?filters[product_category][category_slug][$eq]=${categorySlug}&populate=*`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_category][category_slug][$eq]=${categorySlug}&populate=*`
         );
         const data = await response.json();
         if (data?.data) {

@@ -28,7 +28,7 @@ const Page: React.FC = () => {
     const fetchMerken = async () => {
       try {
         const response = await fetch(
-          `http://localhost:1337/api/brands?filters[brand_slug][$eq]=${slug}&populate=*`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}brands?filters[brand_slug][$eq]=${slug}&populate=*`
         );
         const data = await response.json();
         if (data?.data) {
