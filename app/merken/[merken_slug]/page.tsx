@@ -131,12 +131,12 @@ const Page: React.FC = () => {
         {/* Products Section */}
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Productos
+            Products
           </h2>
 
           {products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No hay productos disponibles</p>
+              <p className="text-gray-500">Sorry no products found</p>
             </div>
           ) : (
             <>
@@ -182,7 +182,7 @@ const Page: React.FC = () => {
                     onClick={loadMoreProducts}
                     className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
                   >
-                    Ver más productos
+                   See more
                   </button>
                 </div>
               )}
@@ -208,7 +208,7 @@ const Page: React.FC = () => {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              Volver a marcas
+              Go Back
             </button>
           </Link>
         </div>
