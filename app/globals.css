@@ -131,6 +131,9 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  color: #333333
+h6,
+p {
+  color: #6b7280;
+  user-select: none;
+  
 }

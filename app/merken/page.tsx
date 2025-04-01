@@ -47,7 +47,7 @@ const BrandsPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl">
+          <h1 className="text-center text-3xl font-bold">
             Our Brands
           </h1>
           <p className="my-3 text-xl text-gray-600 max-w-2xl mx-auto">
@@ -95,9 +95,9 @@ const BrandsPage = () => {
                           />
                         </div>
                       </div>
-                      <h3 className="text-xs font-normal text-gray-700 text-center group-hover:font-semibold transition-all mt-1  duration-500">
+                      <p className="text-xs font-normal text-gray-700 text-center group-hover:font-semibold transition-all mt-1  duration-500">
                         {brand.brand_name}
-                      </h3>
+                      </p>
                     </Link>
                   );
                 })}

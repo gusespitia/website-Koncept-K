@@ -49,7 +49,7 @@ const Products = () => {
 
   return (
     <section className="row-start-3 row-end-4 col-span-1 lg:col-span-2 mb-28">
-      <h1 className="text-center text-3xl font-bold mb-6 text-gray-800">
+      <h1 className="text-center text-3xl font-bold mb-6 ">
         Productos
       </h1>
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <div className="relative min-h-screen bg-[var(--color-store)] grid grid-cols-1 lg:grid-cols-2 items-start p-4 lg:p-6 gap-2 rounded-md lg:grid-rows-[380px_minmax(400px,0.8fr)_10px] ">
+    <div className="relative grid grid-cols-1 lg:grid-cols-2 items-start p-4 lg:p-6 gap-2  lg:grid-rows-[380px_minmax(400px,0.8fr)_10px] min-h-screen  py-8 px-4 sm:px-6 lg:px-8 rounded-md shadow-2xl bg-[#EDBCA4]/20 select-none">
       
       {/* Imagen principal en pantallas grandes */}
       <div className="hidden lg:flex justify-center items-center row-span-2">

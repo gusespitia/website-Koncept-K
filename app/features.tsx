@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <section className="w-full max-w-8xl mx-auto px-4  row-start-1 col-span-2">
-      <h1 className="text-2xl font-bold text-center">
+      <h1 className="text-center text-3xl font-bold">
         Discover our brands
       </h1>
       {loading && (
