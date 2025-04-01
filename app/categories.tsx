@@ -35,13 +35,13 @@ const Categories = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-8xl mx-auto py-4">
+    <div className="w-full max-w-8xl mx-auto py-6">
       {loading ? (
         <div className="flex justify-center">
           <p className="text-gray-600">Loading categories...</p>
         </div>
       ) : (
-        <ul className="flex flex-wrap gap-4 justify-center"> {/* Solo un <ul> */}
+        <ul className="flex flex-wrap gap-6 justify-center"> {/* Solo un <ul> */}
           {categories.map((category) => (
             <li key={category.id}> {/* Cada categoría es un <li> */}
               <Link
