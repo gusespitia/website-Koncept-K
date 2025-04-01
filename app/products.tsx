@@ -46,72 +46,75 @@ const Products = () => {
     };
     fetchProducts();
   }, []);
-
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
   return (
-    <section className="row-start-3 row-end-4 col-span-1 lg:col-span-2 mb-28">
-      <h1 className="text-center text-3xl font-bold mb-6 ">
-        Productos
-      </h1>
+   
+    <section className="mb-16">
+    <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+      Productos
+    </h2>
 
-      {/* Contenedor relativo para el botón absoluto */}
-      <div className="relative">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {loading ? (
-            <p>Cargando...</p>
-          ) : products.length === 0 ? (
-            <p>No hay productos</p>
-          ) : (
-            products.slice(0, visibleCount).map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 transform hover:scale-105 cursor-pointer flex flex-col"
-              >
-                <Link href={`/producten/${product.product_slug}`}>
-                  <div className="relative w-full h-56">
-                    <Image
-                      src={
-                        product.product_image?.[0]?.url
-                          ? product.product_image[0].url.startsWith("http")
-                            ? product.product_image[0].url
-                            : `${CLOUDINARY_BASE_URL}${product.product_image[0].url}`
-                          : "/logo.png"
-                      }
-                      alt={product.product_name}
-                      width={400}
-                      height={400}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="p-4 text-center">
-                    <h2 className="text-sm font-semibold text-gray-900 truncate mb-1">
-                      {product.product_name}
-                    </h2>
-
-                    <p className="text-xs  text-center ">
-                      {formatPrice(product.product_price)}
-                    </p>
-
-                    {/* Botón "Ver más" */}
-                  </div>
-                </Link>
-              </div>
-            ))
-          )}
+    {loading ? (
+      <div className="text-center py-12">
+        <p className="text-gray-500">Sorry , no products found</p>
+      </div>
+    ) : (
+      <>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {products.slice(0, visibleCount).map((product) => (
+            <div
+              key={product.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            >
+              <Link href={`/producten/${product.product_slug}`} passHref>
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={
+                      product.product_image?.[0]?.url
+                        ? product.product_image[0].url.startsWith("http")
+                          ? product.product_image[0].url
+                          : `${CLOUDINARY_BASE_URL}${product.product_image[0].url}`
+                        : "/logo.png"
+                    }
+                    alt={product.product_name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                    priority={false}
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                    {product.product_name}
+                  </h3>
+                  <p className="text-indigo-600 font-semibold">
+                    {formatPrice(product.product_price)}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
 
-        {/* Botón posicionado absolutamente en la parte inferior */}
-        {!loading && visibleCount < products.length && (
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full pt-8">
+        {visibleCount < products.length && (
+          <div className="mt-10 text-center">
             <button
               onClick={loadMoreProducts}
-              className="bg-[var(--color-store)] text-gray-600 hover:text-gray-900 duration-200 text-md  uppercase  px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
             >
-              See More Products
+              See More
             </button>
           </div>
         )}
-      </div>
-    </section>
+      </>
+    )}
+  </section>
   );
 };
 
