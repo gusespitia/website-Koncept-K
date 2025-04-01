@@ -65,11 +65,11 @@ export default function ContactForm() {
   }
 
   return (
-    <section className=" my-10">
+    <section className="">
       {/* Formulario */}
       <Card className="w-full max-w-md mx-auto p-4 ">
         <CardHeader>
-          <CardTitle>Contact Us</CardTitle>
+          <CardTitle className="text-center mb-4  text-3xl font-bold] text-gray-500">Contact Us</CardTitle>
           <CardDescription>
             Fill out the form below and we&apos;ll get back to you as soon as
             possible.
@@ -140,7 +140,7 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-[#EDBCA4]">
+              <Button type="submit" className="w-full bg-[var(--color-store)]">
                 Submit
               </Button>
             </form>
