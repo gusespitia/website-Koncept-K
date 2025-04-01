@@ -129,7 +129,7 @@ const Page: React.FC = () => {
         })}
 
         {/* Products Section */}
-        <section className="mb-16">
+        <section className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden p-4 -mt-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Products
           </h2>
@@ -140,7 +140,7 @@ const Page: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
                 {products.slice(0, visibleCount).map((product) => (
                   <div
                     key={product.id}

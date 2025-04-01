@@ -60,7 +60,7 @@ const Products = () => {
       Productos
     </h2>
 
-    {loading ? (
+    {products.length === 0 ? (
       <div className="text-center py-12">
         <p className="text-gray-500">Sorry , no products found</p>
       </div>
