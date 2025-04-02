@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeftToLine } from 'lucide-react';
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
@@ -31,19 +32,32 @@ const Page: React.FC = () => {
   };
   useEffect(() => {
     const fetchProducts = async () => {
+      const controller = new AbortController(); // <- Mover aquí
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // <- Mover aquí
+  
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_category][category_slug][$eq]=${categorySlug}&populate=*`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?filters[product_category][category_slug][$eq]=${categorySlug}&populate=*`,
+          { signal: controller.signal }
         );
         const data = await response.json();
-        if (data?.data) {
-          setLoading(true);
+        if (data?.data.length > 0) 
           setProducts(data.data);
-          console.log(data.data);
-          setLoading(false);
-        }
       } catch (error) {
-        console.error("Error fetching brands:", error);
+        console.log(error);
+        try {
+          // Si falla, intenta con el backup (BACKEND_V2)
+          const responseBackup = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/products?filters[product_category][category_slug][$eq]=${categorySlug}&populate=*`
+          );
+          const dataBackup = await responseBackup.json();
+          if (dataBackup?.data) setProducts(dataBackup.data);
+        } catch (errorBackup) {
+          console.error("Error en ambos backends:", errorBackup);
+        }
+      } finally {
+        clearTimeout(timeoutId);
+        setLoading(false);
       }
     };
 
@@ -91,6 +105,7 @@ const Page: React.FC = () => {
                         alt={product.product_name}
                         width={400}
                         height={400}
+                         loading="lazy"
                         className="object-cover w-full h-full"
                       />
                     </div>
@@ -110,27 +125,13 @@ const Page: React.FC = () => {
           </div>
         )}
 
-        <div className="flex justify-center mt-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-gray-100 rounded-lg shadow-md transition-all"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            Back to Home
-          </Link>
+<div className="text-center ">
+        <Link href="/" className="flex justify-center mt-4">
+                  <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                    <ArrowLeftToLine />
+                    Return to Home
+                  </button>
+                </Link>
         </div>
       </div>
     </div>

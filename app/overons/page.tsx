@@ -12,6 +12,7 @@ const Page = () => {
           height={700}
           src="/image3.jpg"
           alt="Image 3"
+           loading="lazy"
           className="w-full h-auto max-h-[100vh] max-w-md lg:max-w-lg object-cover rounded-2xl shadow-md"
         />
       </div>
@@ -37,6 +38,7 @@ const Page = () => {
           height={200}
           src="/image1.jpg"
           alt="Image 1"
+           loading="lazy"
           className="w-24 h-24 md:w-40 md:h-40 object-cover rounded-full shadow-md animate-in transition-all"
         />
         <Image
@@ -44,6 +46,7 @@ const Page = () => {
           height={200}
           src="/image2.jpg"
           alt="Image 2"
+           loading="lazy"
           className="w-24 h-24 md:w-40 md:h-40 object-cover rounded-full shadow-md"
         />
       </div>

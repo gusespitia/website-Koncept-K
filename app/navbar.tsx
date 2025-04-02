@@ -28,7 +28,8 @@ export default function Navbar() {
     <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[var(--color-store)]">
       {/* Logo */}
       <Link href="/" className="text-xl ml-4">
-        <span className="font-bold">K</span>oncept <span className="font-bold">K.</span>
+        <span className="font-bold">K</span>oncept{" "}
+        <span className="font-bold">K.</span>
       </Link>
       <Link href="/">
         <Image
@@ -36,7 +37,8 @@ export default function Navbar() {
           alt="Logo"
           width={100}
           height={100}
-          className="py-2 justify-self-center"
+          priority
+          className="py-2 justify-self-center w-auto h-auto"
         />
       </Link>
       {/* Menú Desktop */}

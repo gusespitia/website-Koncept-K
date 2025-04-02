@@ -4,7 +4,7 @@ import Products from "./products";
 
 export default function Page() {
   return (
-    <main className="min-h-screen ">
+    <main className="min-h-screen max-w-7xl mx-auto">
       {/* Grid Container */}
       <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[minmax(200px,_auto)_60px_minmax(500px,_auto)]  gap-0">
         {/* Sección Hero con Features (full width) */}

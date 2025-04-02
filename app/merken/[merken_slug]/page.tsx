@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeftToLine } from "lucide-react";
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
@@ -47,28 +48,47 @@ const Page: React.FC = () => {
     setVisibleCount((prev) => prev + 8);
   }, []);
 
+  const fetchWithFallback = async (url: string, backupUrl: string) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.log(`Primary API failed, trying backup: ${error}`);
+      const responseBackup = await fetch(backupUrl);
+      if (!responseBackup.ok)
+        throw new Error(`Backup API failed: ${responseBackup.status}`);
+      return await responseBackup.json();
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Fetch brand data
-        const brandResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}brands?filters[brand_slug][$eq]=${slug}&populate=*`
+
+        // Fetch brand data with fallback
+        const brandData = await fetchWithFallback(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/brands?filters[brand_slug][$eq]=${slug}&populate=*`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/brands?filters[brand_slug][$eq]=${slug}&populate=*`
         );
-        const brandData = await brandResponse.json();
-        
-        // Fetch products data
-        const productResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_brand][brand_slug][$eq]=${slug}&populate=*`
+
+        // Fetch products data with fallback
+        const productData = await fetchWithFallback(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?filters[product_brand][brand_slug][$eq]=${slug}&populate=*`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/products?filters[product_brand][brand_slug][$eq]=${slug}&populate=*`
         );
-        const productData = await productResponse.json();
 
         if (brandData?.data) setBrands(brandData.data);
         if (productData?.data) setProducts(productData.data);
-        
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("All API attempts failed:", error);
       } finally {
         setLoading(false);
       }
@@ -182,7 +202,7 @@ const Page: React.FC = () => {
                     onClick={loadMoreProducts}
                     className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
                   >
-                   See more
+                    See more
                   </button>
                 </div>
               )}
@@ -191,26 +211,13 @@ const Page: React.FC = () => {
         </section>
 
         {/* Back Button */}
-        <div className="text-center">
-          <Link href="/merken" passHref>
-            <button className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              Go Back
-            </button>
-          </Link>
+        <div className="text-center ">
+        <Link href="/merken" className="flex justify-center mt-4">
+                  <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                    <ArrowLeftToLine />
+                    Return to Merken
+                  </button>
+                </Link>
         </div>
       </div>
     </div>

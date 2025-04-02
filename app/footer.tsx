@@ -10,6 +10,7 @@ const Logo = () => {
       alt="logo"
       width={54}
       height={54}
+       priority
       className="w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20"
     />
   );

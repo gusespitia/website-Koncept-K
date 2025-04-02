@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { ArrowLeftToLine } from "lucide-react";
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
 
 interface Brand {
@@ -24,18 +24,58 @@ const BrandsPage = () => {
 
   useEffect(() => {
     const fetchBrands = async () => {
+      let primaryAttemptFailed = false;
+
       try {
         setLoading(true);
+        // Intento con API principal
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}brands?populate=brand_image`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/brands?populate=brand_image`,
+          { signal: controller.signal }
         );
-        const { data } = await response.json();
-        setBrands(data || []);
-      } catch (error) {
-        console.error("Error fetching brands:", error);
-      } finally {
-        setLoading(false);
+
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+        clearTimeout(timeout);
+
+        if (!data?.data || data.data.length === 0) {
+          throw new Error("No data received");
+        }
+
+        setBrands(data.data);
+      } catch (primaryError) {
+        primaryAttemptFailed = true;
+        console.log("Primary API failed, trying backup...", primaryError);
       }
+
+      if (primaryAttemptFailed) {
+        try {
+          // Intento con API de respaldo
+          const responseBackup = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/brands?populate=brand_image`
+          );
+
+          if (!responseBackup.ok)
+            throw new Error(`HTTP error! status: ${responseBackup.status}`);
+
+          const dataBackup = await responseBackup.json();
+
+          if (dataBackup?.data) {
+            setBrands(dataBackup.data);
+          } else {
+            throw new Error("Backup API returned no data");
+          }
+        } catch (backupError) {
+          console.error("Both APIs failed:", backupError);
+        }
+      }
+
+      setLoading(false);
     };
 
     fetchBrands();
@@ -50,7 +90,8 @@ const BrandsPage = () => {
             Our Premium Brands
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover the exceptional brands we proudly collaborate with to bring you quality products
+            Discover the exceptional brands we proudly collaborate with to bring
+            you quality products
           </p>
         </div>
 
@@ -90,7 +131,7 @@ const BrandsPage = () => {
                             fill
                             className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                            priority={false}
+                            loading="lazy"
                           />
                         </div>
                         <h3 className="text-sm font-medium text-gray-800 text-center group-hover:text-indigo-600 transition-colors duration-300 line-clamp-2">
@@ -102,25 +143,39 @@ const BrandsPage = () => {
                 })}
             </div>
           ) : (
-            <div className="bg-white p-12 rounded-xl shadow-sm text-center border border-gray-200">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+            <div className="">
+              <div className="bg-white p-2  text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mt-4">
+                  No brands availables
+                </h3>
+                <p className="text-gray-500">
+                  Please check back later for our latest updates.
+                </p>
+                <div className="text-center ">
+                  <Link href="/" className="flex justify-center mt-4">
+                    <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                      <ArrowLeftToLine />
+                      Return to Home
+                    </button>
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No brands available</h3>
-              <p className="text-gray-500">Check back later for our brand collaborations</p>
             </div>
           )}
         </div>
