@@ -75,8 +75,7 @@ const Products = () => {
   return (
     <section className="mb-16">
       <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-        Productos
-      </h2>
+Producten      </h2>
 
       {products.length === 0 ? (
         <div className="h-auto flex items-center justify-center bg-white rounded-lg shadow-lg p-8 text-center max-w-7xl mx-auto mb-8">
@@ -119,7 +118,7 @@ const Products = () => {
                     d="M10 19l-7-7m0 0l7-7m-7 7h18"
                   />
                 </svg>
-                Return to Home
+                Terug
               </button>{" "}
             </Link>
           </div>
@@ -169,7 +168,7 @@ const Products = () => {
              className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
            >
              <CircleFadingPlus />
-             See More
+             Ontdek meer
            </button>
          </div>
           )}

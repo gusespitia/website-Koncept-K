@@ -69,10 +69,9 @@ export default function ContactForm() {
       {/* Formulario */}
       <Card className="w-full max-w-md mx-auto p-4 ">
         <CardHeader>
-          <CardTitle className="text-center mb-4  text-3xl font-bold] text-gray-500">Contact Us</CardTitle>
+          <CardTitle className="text-center mb-4  text-3xl font-bold] text-gray-500">Contacteer ons</CardTitle>
           <CardDescription>
-            Fill out the form below and we&apos;ll get back to you as soon as
-            possible.
+            Contacteer ons via onderstaand formulier en we bezorgen je zo snel mogelijk antwoord.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -84,9 +83,9 @@ export default function ContactForm() {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>Naam</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your first name" {...field} />
+                        <Input placeholder="Naam" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -97,9 +96,9 @@ export default function ContactForm() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>Familienaam</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your last name" {...field} />
+                        <Input placeholder="Familienaam" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -115,7 +114,7 @@ export default function ContactForm() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Emailadres"
                         {...field}
                       />
                     </FormControl>
@@ -128,10 +127,10 @@ export default function ContactForm() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>Bericht</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter your message"
+                        placeholder="Schrijf hier je bericht"
                         className="min-h-[120px]"
                         {...field}
                       />
@@ -141,7 +140,7 @@ export default function ContactForm() {
                 )}
               />
               <Button type="submit" className="w-full bg-[var(--color-store)]">
-                Submit
+                Verzenden
               </Button>
             </form>
           </Form>

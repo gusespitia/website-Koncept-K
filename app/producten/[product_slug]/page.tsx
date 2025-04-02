@@ -59,7 +59,7 @@ const Page = () => {
       const timeoutId = setTimeout(() => controller.abort(), 5000); // <- Mover aquí
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_slug][$eq]=${slug}&populate=*`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?filters[product_slug][$eq]=${slug}&populate=*`,
           { signal: controller.signal }
         );
         const data = await response.json();
@@ -75,7 +75,7 @@ const Page = () => {
             `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/products?filters[product_slug][$eq]=${slug}&populate=*`
           );
           const dataBackup = await responseBackup.json();
-          if (dataBackup?.data) setProduct(dataBackup.data);
+          if (dataBackup?.data) setProduct(dataBackup.data[0]);
         } catch (errorBackup) {
           console.error("Error en ambos backends:", errorBackup);
         }
@@ -147,7 +147,7 @@ const Page = () => {
           <Link href="/" className="flex justify-center mt-4">
             <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
               <ArrowLeftToLine />
-              Return to Home
+              Terug
             </button>
           </Link>
         </div>
@@ -304,7 +304,7 @@ const Page = () => {
         <Link href="/" className="flex justify-center mt-4">
           <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
             <ArrowLeftToLine />
-            Return to Home
+            Terug
             </button>
         </Link>
       </div>

@@ -151,12 +151,12 @@ const Page: React.FC = () => {
         {/* Products Section */}
         <section className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden p-4 -mt-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Products
+            Producten
           </h2>
 
           {products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Sorry no products found</p>
+              <p className="text-gray-500">Geen producten gevonden</p>
             </div>
           ) : (
             <>
@@ -202,7 +202,7 @@ const Page: React.FC = () => {
                     onClick={loadMoreProducts}
                     className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
                   >
-                    See more
+                    Ontdek meer
                   </button>
                 </div>
               )}
@@ -215,7 +215,7 @@ const Page: React.FC = () => {
         <Link href="/merken" className="flex justify-center mt-4">
                   <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                     <ArrowLeftToLine />
-                    Return to Merken
+                    Terug
                   </button>
                 </Link>
         </div>

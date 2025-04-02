@@ -87,11 +87,10 @@ const BrandsPage = () => {
         {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Our Premium Brands
+            Onze merken
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover the exceptional brands we proudly collaborate with to bring
-            you quality products
+            Ontdek onze fantastische en unieke merken
           </p>
         </div>
 
@@ -171,7 +170,7 @@ const BrandsPage = () => {
                   <Link href="/" className="flex justify-center mt-4">
                     <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                       <ArrowLeftToLine />
-                      Return to Home
+                      Terug
                     </button>
                   </Link>
                 </div>
