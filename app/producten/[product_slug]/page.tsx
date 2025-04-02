@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeftToLine } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -54,9 +55,12 @@ const Page = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      const controller = new AbortController(); // <- Mover aquí
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // <- Mover aquí
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_slug][$eq]=${slug}&populate=*`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}products?filters[product_slug][$eq]=${slug}&populate=*`,
+          { signal: controller.signal }
         );
         const data = await response.json();
         if (data?.data?.length > 0) {
@@ -64,7 +68,19 @@ const Page = () => {
         }
       } catch (error) {
         console.error("Error fetching product:", error);
+
+        try {
+          // Si falla, intenta con el backup (BACKEND_V2)
+          const responseBackup = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/products?filters[product_slug][$eq]=${slug}&populate=*`
+          );
+          const dataBackup = await responseBackup.json();
+          if (dataBackup?.data) setProduct(dataBackup.data);
+        } catch (errorBackup) {
+          console.error("Error en ambos backends:", errorBackup);
+        }
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };
@@ -104,16 +120,12 @@ const Page = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-8 text-center max-w-md">
-          <h2 className="text-xl font-bold mb-4">Product Not Found</h2>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800"
-          >
+      <div className="h-auto flex items-center justify-center bg-white rounded-lg shadow-lg p-8 text-center max-w-7xl mx-auto mb-8">
+        <div className="bg-white p-12  text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 mt-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-6 w-6 text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -122,10 +134,21 @@ const Page = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            Return to Home
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mt-4">
+            No products availables
+          </h3>
+          <p className="text-gray-500">
+            Please check back later for our latest updates.
+          </p>{" "}
+          <Link href="/" className="flex justify-center mt-4">
+            <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+              <ArrowLeftToLine />
+              Return to Home
+            </button>
           </Link>
         </div>
       </div>
@@ -166,7 +189,7 @@ const Page = () => {
                             fill
                             className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw "
-                            priority={index === 0}
+                            loading="lazy"
                           />
                           <div className="absolute bottom-1 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
                             {index + 1}/{images.length}
@@ -231,10 +254,11 @@ const Page = () => {
                                   backgroundColor: color.color_name,
                                 }),
                           }}
-                          title={color.color_name.charAt(0).toUpperCase() + color.color_name.slice(1).toLowerCase()}
+                          title={
+                            color.color_name.charAt(0).toUpperCase() +
+                            color.color_name.slice(1).toLowerCase()
+                          }
                         ></div>
-
-                       
                       </div>
                     ))}
                   </div>
@@ -277,28 +301,12 @@ const Page = () => {
         </div>
 
         {/* Back Button */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm text-gray-700 font-medium transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            Back to Shop
-          </Link>
-        </div>
+        <Link href="/" className="flex justify-center mt-4">
+          <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            <ArrowLeftToLine />
+            Return to Home
+            </button>
+        </Link>
       </div>
 
       {/* Lightbox Dialog */}

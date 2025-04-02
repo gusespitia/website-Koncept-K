@@ -14,6 +14,7 @@ export default function Page() {
           src="/store1.jpg"
           alt="contact"
           width={500}
+           loading="lazy"
           height={500}
           className="rounded-3xl mb-8"
         ></Image>

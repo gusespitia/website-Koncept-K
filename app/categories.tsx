@@ -6,36 +6,89 @@ interface Category {
   id: number;
   category_name: string;
   category_slug: string;
-  category_image?: { url: string; name: string };
+  category_image?: {
+    url: string;
+    name: string;
+  };
 }
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       try {
+        // Intento con API principal
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}categories?populate=category_image`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
+          { signal: controller.signal }
         );
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
         const data = await response.json();
-        if (data?.data) {
+        clearTimeout(timeoutId);
+
+        if (data?.data?.length > 0) {
           setCategories(data.data);
+        } else {
+          throw new Error("No categories found in primary API");
         }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      } catch (primaryError) {
+        console.log("Trying backup API...", primaryError);
+        try {
+          // Intento con API de respaldo
+          const responseBackup = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
+          );
+
+          if (!responseBackup.ok) throw new Error(`HTTP error! status: ${responseBackup.status}`);
+
+          const dataBackup = await responseBackup.json();
+          
+          if (dataBackup?.data) {
+            setCategories(dataBackup.data);
+          } else {
+            throw new Error("No categories found in backup API");
+          }
+        } catch (backupError) {
+          console.error("Both APIs failed:", backupError);
+          setError("Failed to load categories. Please try again later.");
+        }
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };
 
     fetchCategories();
   }, []);
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-[50vh] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[50vh] flex flex-col items-center justify-center text-center p-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+        <button 
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+        >
+          Retry
+        </button>
       </div>
     );
   }
