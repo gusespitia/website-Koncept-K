@@ -81,7 +81,7 @@ const Page: React.FC = () => {
        
         {products.length === 0 ? (
           <p className="text-center text-gray-500">
-            Sorry no products found in this category.
+            Sorry, geen producten gevonden in deze categorie.
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -129,7 +129,7 @@ const Page: React.FC = () => {
         <Link href="/" className="flex justify-center mt-4">
                   <button className="inline-flex items-center gap-2 px-4 py-3 border border-gray-300 shadow-sm text-md font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none hover:inset-shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                     <ArrowLeftToLine />
-                    Return to Home
+                    Terug
                   </button>
                 </Link>
         </div>
