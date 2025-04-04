@@ -26,6 +26,11 @@ interface ProductSize {
   id: number;
   size_name: string;
 }
+interface ProductMaterial {
+  id: number;
+  material_type: string;
+  material_visible: boolean;
+}
 
 interface Product {
   id: number;
@@ -33,6 +38,7 @@ interface Product {
   product_price: number;
   product_slug: string;
   product_size?: ProductSize[];
+  product_materials?: ProductMaterial[];
   product_description: string | string[];
   product_description_general?: string;
   product_image?: { url: string; name: string }[];
@@ -244,53 +250,18 @@ const Page = () => {
 
               {/* Key Features */}
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Key Features
-                </h3>
                 <ul className="space-y-2 text-gray-700">
-                  {Array.isArray(product.product_description) ? (
-                    product.product_description.map((feature, index) => (
-                      <li key={index} className="flex items-start">
-                        <svg
-                          className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        <span>{feature}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="flex items-start">
-                      <svg
-                        className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span>{product.product_description}</span>
-                    </li>
-                  )}
+                  <li className="flex items-start font-medium text-gray-500 mb-2">
+                    <span>{product.product_description}</span>
+                  </li>
                 </ul>
               </div>
-
+              <h3 className="text-lg font-bold text-black mb-3">
+                Key Features
+              </h3>
               {/* Sizes */}
               {product.product_size && (
-                <div className="mb-6">
+                <div className="mb-4">
                   <h4 className="text-sm font-medium text-gray-500 mb-2">
                     Available sizes
                   </h4>
@@ -298,7 +269,7 @@ const Page = () => {
                     {product.product_size.map((size) => (
                       <span
                         key={size.id}
-                        className="px-3 py-1.5 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                        className="px-3 py-1.5 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-50 transition-colors hover:scale-110"
                       >
                         {size.size_name}
                       </span>
@@ -306,45 +277,65 @@ const Page = () => {
                   </div>
                 </div>
               )}
-
-              {/* Colors */}
-              {product.product_colors && (
-                <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-500 mb-2">
-                    Available colors
-                  </h4>
-                  <div className="flex flex-wrap gap-3">
-                    {product.product_colors.map((color) => {
-                      const isHexColor = /^#([0-9A-F]{3}){1,2}$/i.test(
-                        color.color_name
-                      );
-                      const colorName =
-                        color.color_name.charAt(0).toUpperCase() +
-                        color.color_name.slice(1);
-
-                      return (
-                        <div
-                          key={color.id}
-                          className="flex flex-col items-center group"
+              <hr className="my-2" />
+              {Array.isArray(product.product_materials) &&
+                product.product_materials.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-500 mb-2">
+                      Available materials
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {product.product_materials?.map((material) => (
+                        <span
+                          key={material.id}
+                          className="hover:scale-110 px-3 py-1.5 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
                         >
-                          <div
-                            className={`h-8 w-8 sm:h-10 sm:w-10 rounded-full border border-gray-200 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md`}
-                            style={{
-                              backgroundColor: isHexColor
-                                ? color.color_name
-                                : color.color_name || "#cccccc",
-                            }}
-                            title={colorName}
-                          />
-                          <span className="mt-1 text-xs text-gray-500">
-                            {colorName}
-                          </span>
-                        </div>
-                      );
-                    })}
+                          {material.material_type}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              <hr className="my-2" />
+              {/* Colors */}
+              {Array.isArray(product.product_colors) &&
+                product.product_colors.length > 0 && (
+                  <div className="mb-8">
+                    <h4 className="text-sm font-medium text-gray-500 mb-2">
+                      Available colors
+                    </h4>
+                    <div className="flex flex-wrap gap-3">
+                      {product.product_colors.map((color) => {
+                        const isHexColor = /^#([0-9A-F]{3}){1,2}$/i.test(
+                          color.color_name
+                        );
+                        const colorName =
+                          color.color_name.charAt(0).toUpperCase() +
+                          color.color_name.slice(1);
+
+                        return (
+                          <div
+                            key={color.id}
+                            className="flex flex-col items-center group"
+                          >
+                            <div
+                              className={`h-8 w-8 sm:h-10 sm:w-10 rounded-full border border-gray-200 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md`}
+                              style={{
+                                backgroundColor: isHexColor
+                                  ? color.color_name
+                                  : color.color_name || "#cccccc",
+                              }}
+                              title={colorName}
+                            />
+                            <span className="mt-1 text-xs text-gray-500">
+                              {colorName}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
               {/* Detailed Description */}
               {product.product_description_general && (
