@@ -3,12 +3,12 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <div className="min-h-screen bg-[#EDBCA4]/20 p-4 sm:p-6 lg:p-8">
+    <div className=" bg-[#EDBCA4]/20 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start lg:gap-6">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2  items-start lg:gap-6 ">
           {/* Imagen principal - solo visible en desktop */}
-          <div className="hidden lg:block lg:top-8">
-            <div className="relative min-h-[800px] h-full rounded-2xl shadow-lg overflow-hidden">
+          <div className="hidden lg:top-8 sm:block">
+            <div className="relative min-h-[900px]  h-full rounded-2xl shadow-lg overflow-hidden">
               <Image
                 src="/image3.jpg"
                 alt="Koncept K. store"
@@ -21,9 +21,9 @@ const Page = () => {
           </div>
 
           {/* Contenido principal */}
-          <div className="relative -mt-14 ">
+          <div className="relative lg:-mt-14 md:mt-4">
             {/* Caja de texto - ahora responsive sin position absolute problemático */}
-            <div className="bg-white px-6 sm:px-8 md:px-10 rounded-xl shadow-lg lg:mt-20 mb-8 lg:mb-12 py-4 -ml-30">
+            <div className="bg-white  px-6 sm:px-8 md:px-10 rounded-xl shadow-lg lg:mt-20 md:mb-6 lg:mb-12 py-4 sm:py-6 md:p-6  lg:py-10 md:-ml-14 lg:-ml-30  ">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-medium text-center mb-6">
                 Welkom bij <span className="font-bold">K</span>oncept{" "}
                 <span className="font-bold">K.</span>
@@ -43,23 +43,23 @@ const Page = () => {
             </div>
 
             {/* Imágenes inferiores - ahora posicionadas correctamente */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8 md:gap-10 bottom-0 left-0 right-0 ">
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full shadow-lg overflow-hidden">
+            <div className="flex  justify-center items-center gap-6 sm:gap-8 md:gap-10 bottom-0 left-0 right-0 flex-row py-16">
+              <div className="relative w-50 h-50 sm:w-50 sm:h-50 md:w-60 md:h-40 lg:w-60 lg:h-60 rounded-full shadow-lg overflow-hidden">
                 <Image
                   src="/image1.jpg"
                   alt="Product showcase 1"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                  sizes="(max-width: 600px) 100vw, (max-width: 700px) 50vw, 33vw"
                 />
               </div>
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full shadow-lg overflow-hidden">
+              <div className="relative w-50 h-50 sm:w-50 sm:h-50 md:w-60 md:h-40 lg:w-60 lg:h-60 rounded-full shadow-lg overflow-hidden">
                 <Image
                   src="/image2.jpg"
                   alt="Product showcase 2"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                  sizes="(max-width: 600px) 100vw, (max-width: 700px) 50vw, 33vw"
                 />
               </div>
             </div>

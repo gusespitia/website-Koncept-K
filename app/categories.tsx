@@ -29,7 +29,8 @@ const Categories = () => {
           { signal: controller.signal }
         );
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
         clearTimeout(timeoutId);
@@ -47,10 +48,11 @@ const Categories = () => {
             `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
           );
 
-          if (!responseBackup.ok) throw new Error(`HTTP error! status: ${responseBackup.status}`);
+          if (!responseBackup.ok)
+            throw new Error(`HTTP error! status: ${responseBackup.status}`);
 
           const dataBackup = await responseBackup.json();
-          
+
           if (dataBackup?.data) {
             setCategories(dataBackup.data);
           } else {
@@ -83,7 +85,7 @@ const Categories = () => {
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
         >
@@ -94,18 +96,18 @@ const Categories = () => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div className="w-full max-w-7xl mx-auto py-10 px-auto sm:px-6 lg:px-8 ">
       {loading ? (
         <div className="flex justify-center">
           <p className="text-gray-600 text-lg">Loading categories...</p>
         </div>
       ) : (
-        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <ul className="mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 sm:gap-6 px-4 sm:px-6 py-6 ">
           {categories.map((category) => (
-            <li key={category.id} className="flex justify-center ">
+            <li key={category.id} className="flex justify-center">
               <Link
                 href={`/categories/${category.category_slug}`}
-                className="block w-full text-center px-6 py-2 bg-gray-100 border border-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-200 font-medium"
+                className="block w-full max-w-xs text-center px-4 py-2 bg-gray-100 border border-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-200 font-medium text-sm sm:text-base"
               >
                 {category.category_name}
               </Link>
