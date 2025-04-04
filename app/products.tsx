@@ -97,10 +97,10 @@ Producten      </h2>
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mt-4">
-              No products availables
+              NGeen producten beschikbaar
             </h3>
             <p className="text-gray-500">
-              Please check back later for our latest updates.
+              Kom later terug voor onze nieuwste producten
             </p>{" "}
             <Link href="/" className="">
               <button className="w-fit mx-auto mt-8 flex gap-2  items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[var(--color-store)] hover:shadow-accent-foreground hover:shadow-sm hover:text-gray-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 duration-500">
