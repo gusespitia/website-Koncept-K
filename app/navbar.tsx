@@ -25,73 +25,93 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="grid grid-cols-3 items-center justify-between px-2 py-0 shadow-md bg-[var(--color-store)]">
-      {/* Logo */}
-      <Link href="/" className="text-xl ml-4">
-        <span className="font-bold">K</span>oncept{" "}
-        <span className="font-bold">K.</span>
-      </Link>
-      <Link href="/">
-        <Image
-          src="/logo.png"
-          alt="Logo"
-          width={100}
-          height={100}
-          priority
-          className="py-2 justify-self-center w-auto h-auto"
-        />
-      </Link>
-      {/* Menú Desktop */}
-      <div className="hidden md:flex space-x-4 justify-end">
-        {menu.map((item) => (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={`hover:text-gray-800 font-bold mr-4 transition duration-700 hover:scale-110  ${
-              pathname === item.href
-                ? "text-white border-b-2 border-b-white transition duration-700"
-                : "text-gray-600"
-            }`}
-          >
-            {item.name}
-          </Link>
-        ))}
-      </div>
+    <nav className="sticky top-0 z-50 w-full bg-[var(--color-store)] shadow-md">
+      <div className="mx-auto max-w-7xl p-2 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo y marca */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center">
+              <div className="hidden md:block">
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  width={80}
+                  height={80}
+                  priority
+                  className="h-auto w-16"
+                />
+              </div>
+              <span className="ml-2 text-xl   md:ml-4">
+              <span className="font-bold">K</span>oncept{" "}
+              <span className="font-bold">K.</span>
+              </span>
+            </Link>
+          </div>
 
-      {/* Menú Móvil */}
-      <div className="md:hidden flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            {menu.map((item) => (
-              <DropdownMenuItem
-                key={item.name}
-                className={pathname === item.href ? "bg-blue-50" : ""}
-              >
+          {/* Menú Desktop */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-center space-x-4">
+              {menu.map((item) => (
                 <Link
+                  key={item.name}
                   href={item.href}
-                  className={`w-full ${
-                    pathname === item.href ? "text-blue-600" : "text-gray-600"
+                  className={`hover:text-gray-800 font-bold mr-4  duration-700 hover:scale-110 px-3 py-0 text-md  transition-all duration-300  ${
+                    pathname === item.href
+                      ? "text-white border-b-2 border-b-white transition duration-700"
+                      : "text-gray-600"
                   }`}
                 >
                   {item.name}
                 </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              ))}
+            </div>
+          </div>
+
+          {/* Menú Móvil */}
+          <div className="flex md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 hover:text-white focus:outline-none"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  {isOpen ? (
+                    <X className="h-6 w-6" />
+                  ) : (
+                    <Menu className="h-6 w-6" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-56 bg-white shadow-lg"
+              >
+                {menu.map((item) => (
+                  <DropdownMenuItem
+                    key={item.name}
+                    className={`${
+                      pathname === item.href ? "bg-gray-100" : ""
+                    } focus:bg-gray-100`}
+                  >
+                    <Link
+                      href={item.href}
+                      className={`w-full px-4 py-2 text-sm ${
+                        pathname === item.href
+                          ? "text-blue-600 font-medium"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
       </div>
     </nav>
   );
