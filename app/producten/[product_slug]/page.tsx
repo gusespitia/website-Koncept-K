@@ -139,7 +139,7 @@ const Page = () => {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 mt-4">
-            No products availables
+            ucts availables
           </h3>
           <p className="text-gray-500">
             Please check back later for our latest updates.
