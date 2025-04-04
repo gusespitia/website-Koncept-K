@@ -17,7 +17,7 @@ interface Product {
 const Products = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   const formatPrice = (price: number | undefined) => {
     if (price === undefined) return "€0,00";
@@ -28,7 +28,7 @@ const Products = () => {
   };
 
   const loadMoreProducts = useCallback(() => {
-    setVisibleCount((prev) => prev + 5);
+    setVisibleCount((prev) => prev + 10);
   }, []);
 
   useEffect(() => {
