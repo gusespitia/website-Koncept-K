@@ -97,7 +97,7 @@ Producten      </h2>
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mt-4">
-              NGeen producten beschikbaar
+              Geen producten beschikbaar
             </h3>
             <p className="text-gray-500">
               Kom later terug voor onze nieuwste producten
