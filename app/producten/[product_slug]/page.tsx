@@ -194,7 +194,7 @@ const Page = () => {
           {/* Product Content */}
           <div className="flex flex-col lg:flex-row">
             {/* Image Gallery - Left Column */}
-            <div className="w-full lg:w-1/2 p-4 sm:p-6">
+            <div className="w-full lg:w-1/2 p-4 sm:p-6 shadow-inner">
               {images.length > 1 ? (
                 <Carousel className="w-full">
                   <CarouselContent>
@@ -240,7 +240,7 @@ const Page = () => {
             </div>
 
             {/* Product Details - Right Column */}
-            <div className="w-full lg:w-1/2 p-4 sm:p-6 border-t lg:border-t-0 lg:border-l border-gray-100">
+            <div className="w-full lg:w-1/2 p-4 sm:p-6 border-t lg:border-t-0 lg:border-l border-gray-100 shadow-inner">
               {/* Price */}
               <div className="mb-4">
                 <p className="text-3xl font-bold text-gray-900">
@@ -260,27 +260,74 @@ const Page = () => {
                 Key Features
               </h3>
               {/* Sizes */}
-              {product.product_size && (
+              {Array.isArray(product.product_size) &&
+                product.product_size.length > 0 && (
                 <div className="mb-4">
                   <h4 className="text-sm font-medium text-gray-500 mb-2">
                     Available sizes
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {product.product_size.map((size) => (
-                      <span
-                        key={size.id}
-                        className="px-3 py-1.5 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-50 transition-colors hover:scale-110"
-                      >
-                        {size.size_name}
-                      </span>
-                    ))}
+                    {[...product.product_size]
+                      .sort((a, b) => {
+                        // Definimos el orden de las tallas alfabéticas
+                        const sizeOrder = [
+                          "XXXS",
+                          "XXS",
+                          "XS",
+                          "S",
+                          "M",
+                          "L",
+                          "XL",
+                          "XXL",
+                          "XXXL",
+                          "XXXXL",
+                        ];
+
+                        // Verificamos si ambas tallas son alfabéticas
+                        const isASize = sizeOrder.includes(
+                          a.size_name.toUpperCase()
+                        );
+                        const isBSize = sizeOrder.includes(
+                          b.size_name.toUpperCase()
+                        );
+
+                        // Si ambas son tallas alfabéticas
+                        if (isASize && isBSize) {
+                          return (
+                            sizeOrder.indexOf(a.size_name.toUpperCase()) -
+                            sizeOrder.indexOf(b.size_name.toUpperCase())
+                          );
+                        }
+                        // Si solo A es talla alfabética
+                        else if (isASize) {
+                          return -1; // Las alfabéticas van primero
+                        }
+                        // Si solo B es talla alfabética
+                        else if (isBSize) {
+                          return 1; // Las alfabéticas van primero
+                        }
+                        // Si ambas son numéricas (o convertible a número)
+                        else {
+                          return Number(a.size_name) - Number(b.size_name);
+                        }
+                      })
+                      .map((size) => (
+                        <span
+                          key={size.id}
+                          className="px-3 py-1.5 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-50 transition-colors hover:scale-110"
+                        >
+                          {size.size_name}
+                        </span>
+                      ))}
                   </div>
                 </div>
               )}
-              <hr className="my-2" />
+            
               {Array.isArray(product.product_materials) &&
                 product.product_materials.length > 0 && (
+                  
                   <div className="mb-4">
+                      <hr className="my-2" />
                     <h4 className="text-sm font-medium text-gray-500 mb-2">
                       Available materials
                     </h4>
@@ -296,11 +343,12 @@ const Page = () => {
                     </div>
                   </div>
                 )}
-              <hr className="my-2" />
+            
               {/* Colors */}
               {Array.isArray(product.product_colors) &&
                 product.product_colors.length > 0 && (
                   <div className="mb-8">
+                      <hr className="my-2" />
                     <h4 className="text-sm font-medium text-gray-500 mb-2">
                       Available colors
                     </h4>
