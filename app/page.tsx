@@ -1,6 +1,7 @@
 import Features from "./features";
 import Categories from "./categories";
-import Products from "./products";
+
+import Carrusel from "./carrosuel";
 
 export default function Page() {
   return (
@@ -16,10 +17,9 @@ export default function Page() {
         <div className="" />
 
         {/* Sección Principal (Categorías + Productos) */}
-        <section className="col-span-full bg-white px-6 py-4 shadow-2xl rounded-md mb-6 -mt-12">
+        <section className="col-span-full bg-white px-6 py-0 shadow-2xl rounded-md mb-6 -mt-12">
           {/* Categorías */}
              {/* Separador sutil */}
-             <hr className="border-t border-gray-200 max-w-7xl mx-auto" />
           <div className="max-w-7xl mx-auto">
             <Categories />
           </div>
@@ -29,7 +29,7 @@ export default function Page() {
 
           {/* Productos */}
           <div className="max-w-7xl mx-auto mt-4 ">
-            <Products />
+            <Carrusel />
           </div>
         </section>
       </div>

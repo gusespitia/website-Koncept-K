@@ -159,15 +159,15 @@ const Page = () => {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Product not available
+            Product niet beschikbaar
           </h3>
           <p className="text-gray-500 mb-4">
-            Please check back later or browse our other products.
+            Kom later terug of ontdek onze vele andere producten.
           </p>
           <Link href="/" className="inline-flex justify-center">
             <button className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
               <ArrowLeftToLine size={16} />
-              Back to store
+              Terug naar winkel
             </button>
           </Link>
         </div>
