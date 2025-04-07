@@ -70,13 +70,17 @@ const Carrusel = () => {
     <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-gray-800">Openingsuren</h3>
     <div className="space-y-2 text-gray-600">
       <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">📅</span>
-        Woensdag tot Zaterdag: 11:00 - 18:00
+        <span className="inline-block w-6 mr-2">📍</span>
+        Statiestraat 135, 2600 Berchem
       </p>
-    
       <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">🚫</span>
-        Zondag, Maandag en Dinsdag: Gesloten
+        <span className="inline-block w-6 mr-2">🕖</span>
+        Openingsuren: van woensdag tot zaterdag 11:00 - 18:00
+      </p>
+      <p className="flex items-center">
+        <span className="inline-block w-6 mr-2">🛍️</span>
+        Elke eerste zondag van de maand is koopzondag.
+        De winkel zal dan geopend zijn van 13:00 tot 18:00.
       </p>
     </div>
   </div>
