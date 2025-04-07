@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { setCookie } from 'cookies-next';
 import {
   Form,
   FormControl,
@@ -51,9 +52,16 @@ export default function ContactForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      // Set security cookie
+      setCookie('form_token', 'generated_token_here', {
+        maxAge: 60 * 60, // 1 hour
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+      });
+
       await send(values);
-      setIsSubmitted(true); // Mostrar ventana de confirmación
-      form.reset(); // Limpiar el formulario después del envío
+      setIsSubmitted(true);
+      form.reset();
 
       // Redirigir a la home después de 10 segundos
       setTimeout(() => {
