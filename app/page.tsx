@@ -1,6 +1,5 @@
 import Features from "./features";
 import Categories from "./categories";
-
 import Carrusel from "./carrosuel";
 
 export default function Page() {

@@ -2,7 +2,6 @@
 import React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
-import Link from "next/link";
 import {
   Carousel,
   CarouselContent,
@@ -45,19 +44,19 @@ const Carrusel = () => {
           <CarouselContent>
             {brands.map((brand) => (
               <CarouselItem key={brand.id} className="basis-full">
-                <Link href={`/merken/${brand.picture}`}>
+               
                   <div className="flex flex-col items-center  bg-white rounded-sm shadow-md hover:shadow-md transition-shadow duration-300 mx-2">
-                    <div className="relative w-full h-96">
+                    <div className="relative w-full h-96 select-none cursor-pointer">
                       <Image
                         src={brand.picture}
                         alt={brand.name}
                         fill
-                        className="object-cover rounded-t-sm w-full h-full"
+                        className="object-cover rounded-sm w-full h-full"
                       />
                     </div>
                     <div className="mt-4 text-center"></div>
                   </div>
-                </Link>
+              
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -65,22 +64,19 @@ const Carrusel = () => {
           <CarouselNext className="hidden md:flex absolute right-0 translate-x-8" />
         </Carousel>
       </div>
-      <hr className="my-8"/>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-  <div className="order-2 md:order-1">       
-    <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-gray-800">Horario de atención</h3>
+      <hr className="my-12 border-t border-gray-200 max-w-7xl mx-auto mt-12"/>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
+      <div className="order-2 md:order-1">       
+    <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-gray-800">Openingsuren</h3>
     <div className="space-y-2 text-gray-600">
       <p className="flex items-center">
         <span className="inline-block w-6 mr-2">📅</span>
-        Lunes a Viernes: 9:00 - 18:00
+        Woensdag tot Zaterdag: 11:00 - 18:00
       </p>
-      <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">⏰</span>
-        Sábados: 9:00 - 14:00
-      </p>
+    
       <p className="flex items-center">
         <span className="inline-block w-6 mr-2">🚫</span>
-        Domingos: Cerrado
+        Zondag, Maandag en Dinsdag: Gesloten
       </p>
     </div>
   </div>
