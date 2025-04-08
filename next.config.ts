@@ -9,6 +9,17 @@ const nextConfig = {
       },
     ],
   },
+  headers: async () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Set-Cookie',
+          value: 'cookie_consent=strictly_necessary; Path=/; HttpOnly; SameSite=Lax'
+        }
+      ]
+    }
+  ]
 };
 
 module.exports = nextConfig;

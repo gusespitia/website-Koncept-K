@@ -3,8 +3,12 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dcs91nwxd/image";
+const DEFAULT_PLACEHOLDER = "/placeholder-category.png";
 
 interface Category {
   id: number;
@@ -20,123 +24,152 @@ const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retrying, setRetrying] = useState(false);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const fetchCategories = async (signal?: AbortSignal) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Intento con API principal
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
+        { signal }
+      );
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data?.data?.length > 0) {
+        setCategories(data.data);
+        return;
+      }
+      throw new Error("No categories found in primary API");
+    } catch (primaryError) {
+      if (primaryError.name === 'AbortError') {
+        console.log('Fetch aborted');
+        return;
+      }
+      
+      console.log("Trying backup API...", primaryError);
       try {
-        // Intento con API principal
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
-          { signal: controller.signal }
+        // Intento con API de respaldo
+        const responseBackup = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
         );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!responseBackup.ok) {
+          throw new Error(`HTTP error! status: ${responseBackup.status}`);
         }
 
-        const data = await response.json();
-        clearTimeout(timeoutId);
+        const dataBackup = await responseBackup.json();
 
-        if (data?.data?.length > 0) {
-          setCategories(data.data);
+        if (dataBackup?.data) {
+          setCategories(dataBackup.data);
         } else {
-          throw new Error("No categories found in primary API");
+          throw new Error("No categories found in backup API");
         }
-      } catch (primaryError) {
-        console.log("Trying backup API...", primaryError);
-        try {
-          // Intento con API de respaldo
-          const responseBackup = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
-          );
-
-          if (!responseBackup.ok) {
-            throw new Error(`HTTP error! status: ${responseBackup.status}`);
-          }
-
-          const dataBackup = await responseBackup.json();
-
-          if (dataBackup?.data) {
-            setCategories(dataBackup.data);
-          } else {
-            throw new Error("No categories found in backup API");
-          }
-        } catch (backupError) {
-          console.error("Both APIs failed:", backupError);
-          setError("Failed to load categories. Please try again later.");
-        }
-      } finally {
-        clearTimeout(timeoutId);
-        setLoading(false);
+      } catch (backupError) {
+        console.error("Both APIs failed:", backupError);
+        throw backupError;
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchCategories();
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    fetchCategories(controller.signal).catch((error) => {
+      setError(error.message || "Failed to load categories. Please try again later.");
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
+
+  const handleRetry = async () => {
+    setRetrying(true);
+    try {
+      await fetchCategories();
+    } catch (error) {
+      setError(error.message || "Failed to load categories. Please try again later.");
+    } finally {
+      setRetrying(false);
+    }
+  };
 
   if (error) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center p-4">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-md">
-          {error}
-        </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
-        >
-          Retry
-        </button>
+        <Alert variant="destructive" className="max-w-md mb-4">
+          <ExclamationTriangleIcon className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+        <Button onClick={handleRetry} disabled={retrying}>
+          {retrying ? (
+            <>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Loading...
+            </>
+          ) : (
+            "Try Again"
+          )}
+        </Button>
       </div>
     );
   }
 
+  const getImageUrl = (category: Category) => {
+    if (!category.category_image?.url) return DEFAULT_PLACEHOLDER;
+    return category.category_image.url.startsWith("http")
+      ? category.category_image.url
+      : `${CLOUDINARY_BASE_URL}${category.category_image.url}`;
+  };
+
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-     
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">   
 
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {[...Array(6)].map((_, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <Skeleton className="w-120 h-120 mb-2" />
-              <Skeleton />
+            <div key={index} className="flex flex-col items-center gap-2">
+              <Skeleton className="w-full aspect-square rounded-lg" />
+              <Skeleton className="h-4 w-3/4" />
             </div>
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          {categories.map((category) => {
-            const imageUrl = category.category_image?.url
-              ? category.category_image.url.startsWith("http")
-                ? category.category_image.url
-                : `${CLOUDINARY_BASE_URL}${category.category_image.url}`
-              : "/placeholder-category.png";
-
-            return (
-              <Link
-                key={category.id}
-                href={`/categories/${category.category_slug}`}
-                className="group flex flex-col items-center p-2 transition-all duration-500 hover:bg-gray-50 hover:shadow-md border-2 border-gray-200"
-              >
-                <div className="relative group-hover:scale-105 transition-transform duration-500 overflow-hidden mb-3  ">
-                  <Image
-                    src={imageUrl}
-                    alt={category.category_name}
-                    width={200}
-                    height={200}
-                    className="object-cover transition-transform  w-full min-h-56 duration-300 group-hover:scale-105"
-                   
-                  />
-                </div>
-                <h3 className="text-sm  font-bold text-black text-center  transition-colors">
-                  {category.category_name}
-                </h3>
-              </Link>
-            );
-          })}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/categories/${category.category_slug}`}
+              className="group flex flex-col items-center p-3 transition-all duration-300 hover:bg-gray-50 hover:shadow-sm rounded-lg border border-gray-200 hover:border-gray-300"
+            >
+              <div className="relative w-full aspect-square overflow-hidden rounded-lg mb-3">
+                <Image
+                  src={getImageUrl(category)}
+                  alt={category.category_name}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={false}
+                />
+              </div>
+              <h3 className="text-sm font-semibold text-center text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                {category.category_name}
+              </h3>
+            </Link>
+          ))}
         </div>
       )}
     </section>
