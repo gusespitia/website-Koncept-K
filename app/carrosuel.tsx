@@ -1,3 +1,4 @@
+// carrusel.tsx
 "use client";
 import React from "react";
 import Autoplay from "embla-carousel-autoplay";
@@ -30,74 +31,38 @@ const Carrusel = () => {
   }
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-12">
-      <div className="relative">
-        <Carousel
-          opts={{
-            loop: true,
-            align: "center",
-            slidesToScroll: 1,
-          }}
-          plugins={[Autoplay({ delay: 9000 })]}
-          className="w-full  mx-auto"
-        >
-          <CarouselContent>
-            {brands.map((brand) => (
-              <CarouselItem key={brand.id} className="basis-full">
-               
-                  <div className="flex flex-col items-center  bg-white rounded-sm shadow-md hover:shadow-md transition-shadow duration-300 mx-2">
-                    <div className="relative w-full h-96 select-none cursor-pointer">
-                      <Image
-                        src={brand.picture}
-                        alt={brand.name}
-                        fill
-                        className="object-cover rounded-sm w-full h-full"
-                      />
-                    </div>
-                    <div className="mt-4 text-center"></div>
-                  </div>
-              
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex absolute left-0 -translate-x-8" />
-          <CarouselNext className="hidden md:flex absolute right-0 translate-x-8" />
-        </Carousel>
-      </div>
-      <hr className="my-12 border-t border-gray-200 max-w-7xl mx-auto mt-12"/>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
-      <div className="order-2 md:order-1">       
-    <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-gray-800">Openingsuren</h3>
-    <div className="space-y-2 text-gray-600">
-      <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">📍</span>
-        Statiestraat 135, 2600 Berchem
-      </p>
-      <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">🕖</span>
-        Openingsuren: van woensdag tot zaterdag 11:00 - 18:00
-      </p>
-      <p className="flex items-center">
-        <span className="inline-block w-6 mr-2">🛍️</span>
-        Elke eerste zondag van de maand is koopzondag.
-        De winkel zal dan geopend zijn van 13:00 tot 18:00.
-      </p>
+    <div className="relative w-full">
+      <Carousel
+        opts={{
+          loop: true,
+          align: "center",
+          slidesToScroll: 1,
+        }}
+        plugins={[Autoplay({ delay: 9000 })]}
+        className="w-full"
+      >
+        <CarouselContent>
+          {brands.map((brand) => (
+            <CarouselItem key={brand.id} className="basis-full">
+              <div className="relative w-full h-[80vh] min-h-[400px]">
+                <Image
+                  src={brand.picture}
+                  alt={brand.name}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="100vw"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="hidden md:flex absolute left-4" />
+        <CarouselNext className="hidden md:flex absolute right-4" />
+      </Carousel>
+
+ 
     </div>
-  </div>
-  
-  <div className="order-1 md:order-2 flex justify-center md:justify-end">
-    <div className="relative w-full max-w-xs h-48 md:h-64 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-      <Image 
-        src="/store1.jpg" 
-        alt="Nuestra tienda" 
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
-    </div>
-  </div>
-</div>
-    </section>
   );
 };
 

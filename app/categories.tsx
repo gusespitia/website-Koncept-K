@@ -136,8 +136,8 @@ const Categories = () => {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">   
-
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">   
+  <hr className="mb-10 border-t border-gray-200" />
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {[...Array(6)].map((_, index) => (
