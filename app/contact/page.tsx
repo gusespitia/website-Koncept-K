@@ -7,7 +7,7 @@ import { PhoneCall, MapPinHouse } from "lucide-react";
 export default function Page() {
 
   return (
-    <div className="grid place-items-center grid-cols-2  justify-items-center">
+    <div className="grid place-items-center grid-cols-2  justify-items-center my-10">
       <ContactForm />
       <div>
         <Image
