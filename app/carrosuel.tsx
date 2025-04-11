@@ -1,4 +1,4 @@
-// carrusel.tsx
+
 "use client";
 import React from "react";
 import Autoplay from "embla-carousel-autoplay";
