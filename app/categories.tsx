@@ -57,7 +57,6 @@ const Categories = () => {
       }
 
       try {
-    
         const responseBackup = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
         );
@@ -93,7 +92,9 @@ const Categories = () => {
 
     fetchCategories(controller.signal).catch((error) => {
       if (error instanceof Error) {
-        setError(error.message || "Failed to load categories. Please try again later.");
+        setError(
+          error.message || "Failed to load categories. Please try again later."
+        );
       } else {
         setError("Failed to load categories. Please try again later.");
       }
@@ -111,7 +112,9 @@ const Categories = () => {
       await fetchCategories();
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message || "Failed to load categories. Please try again later.");
+        setError(
+          error.message || "Failed to load categories. Please try again later."
+        );
       } else {
         setError("Failed to load categories. Please try again later.");
       }

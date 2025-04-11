@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 import Autoplay from "embla-carousel-autoplay";
@@ -60,8 +59,6 @@ const Carrusel = () => {
         <CarouselPrevious className="hidden md:flex absolute left-4" />
         <CarouselNext className="hidden md:flex absolute right-4" />
       </Carousel>
-
- 
     </div>
   );
 };
