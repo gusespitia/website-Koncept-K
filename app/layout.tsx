@@ -1,3 +1,4 @@
+// layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -28,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50  tracking-tight`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 tracking-tight`}
       >
         <Navbar />
-        <main className="flex-grow container mx-auto p-4 relative ">{children}</main>
+        <main className="flex-grow">{children}</main> {/* Eliminado container y padding */}
         <CookieBanner />
         <Footer />
       </body>
