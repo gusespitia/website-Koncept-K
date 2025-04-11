@@ -49,7 +49,6 @@ export default function FooterSection({
   logo = <Logo />,
   name = "Koncept K.",
   columns = [
-    
     {
       title: "Bedrijf",
       links: [
@@ -89,7 +88,8 @@ export default function FooterSection({
           { signal: controller.signal }
         );
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
         clearTimeout(timeoutId);
