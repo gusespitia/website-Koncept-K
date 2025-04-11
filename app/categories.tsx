@@ -30,8 +30,8 @@ const Categories = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Intento con API principal
+
+      // Primary API
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
         { signal }
@@ -47,16 +47,19 @@ const Categories = () => {
         setCategories(data.data);
         return;
       }
+
       throw new Error("No categories found in primary API");
     } catch (primaryError) {
-      if (primaryError.name === 'AbortError') {
-        console.log('Fetch aborted');
-        return;
+      if (primaryError instanceof Error) {
+        if (primaryError.name === "AbortError") {
+          console.log("Fetch aborted");
+          return;
+        }
+        console.log("Trying backup API...", primaryError.message);
       }
-      
-      console.log("Trying backup API...", primaryError);
+
       try {
-        // Intento con API de respaldo
+        // Backup API
         const responseBackup = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
         );
@@ -73,8 +76,13 @@ const Categories = () => {
           throw new Error("No categories found in backup API");
         }
       } catch (backupError) {
-        console.error("Both APIs failed:", backupError);
-        throw backupError;
+        if (backupError instanceof Error) {
+          console.error("Both APIs failed:", backupError.message);
+          throw backupError;
+        } else {
+          console.error("Unexpected error in backup API", backupError);
+          throw new Error("Unexpected error in backup API");
+        }
       }
     } finally {
       setLoading(false);
@@ -86,7 +94,11 @@ const Categories = () => {
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     fetchCategories(controller.signal).catch((error) => {
-      setError(error.message || "Failed to load categories. Please try again later.");
+      if (error instanceof Error) {
+        setError(error.message || "Failed to load categories. Please try again later.");
+      } else {
+        setError("Failed to load categories. Please try again later.");
+      }
     });
 
     return () => {
@@ -100,7 +112,11 @@ const Categories = () => {
     try {
       await fetchCategories();
     } catch (error) {
-      setError(error.message || "Failed to load categories. Please try again later.");
+      if (error instanceof Error) {
+        setError(error.message || "Failed to load categories. Please try again later.");
+      } else {
+        setError("Failed to load categories. Please try again later.");
+      }
     } finally {
       setRetrying(false);
     }
@@ -136,8 +152,8 @@ const Categories = () => {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">   
-  <hr className="mb-10 border-t border-gray-200" />
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <hr className="mb-10 border-t border-gray-200" />
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {[...Array(6)].map((_, index) => (
