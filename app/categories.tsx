@@ -30,8 +30,6 @@ const Categories = () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Primary API
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
         { signal }
@@ -59,7 +57,7 @@ const Categories = () => {
       }
 
       try {
-        // Backup API
+    
         const responseBackup = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
         );
