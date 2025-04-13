@@ -77,39 +77,84 @@ export default function FooterSection({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const fetchCategories = async (signal?: AbortSignal) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
+        { signal }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data?.data?.length > 0) {
+        setCategories(data.data);
+        return;
+      }
+
+      throw new Error("No categories found in primary API");
+    } catch (primaryError) {
+      if (primaryError instanceof Error) {
+        if (primaryError.name === "AbortError") {
+          console.log("Fetch aborted");
+          return;
+        }
+        console.log("Trying backup API...", primaryError.message);
+      }
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories?populate=category_image`,
-          { signal: controller.signal }
+        const responseBackup = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL_V2}/categories?populate=category_image`
         );
 
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-        clearTimeout(timeoutId);
-
-        if (data?.data?.length > 0) {
-          setCategories(data.data);
-        } else {
-          throw new Error("Geen categorieën gevonden");
+        if (!responseBackup.ok) {
+          throw new Error(`HTTP error! status: ${responseBackup.status}`);
         }
-      } catch (error) {
-        console.error("Fout bij laden categorieën:", error);
-        setError("Kon categorieën niet laden. Probeer later opnieuw.");
-      } finally {
-        clearTimeout(timeoutId);
-        setLoading(false);
-      }
-    };
 
-    fetchCategories();
-  }, []);
+        const dataBackup = await responseBackup.json();
+
+        if (dataBackup?.data) {
+          setCategories(dataBackup.data);
+        } else {
+          throw new Error("No categories found in backup API");
+        }
+      } catch (backupError) {
+        if (backupError instanceof Error) {
+          console.error("Both APIs failed:", backupError.message);
+          throw backupError;
+        } else {
+          console.error("Unexpected error in backup API", backupError);
+          throw new Error("Unexpected error in backup API");
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+  
+      fetchCategories(controller.signal).catch((error) => {
+        if (error instanceof Error) {
+          setError(
+            error.message || "Failed to load categories. Please try again later."
+          );
+        } else {
+          setError("Failed to load categories. Please try again later.");
+        }
+      });
+  
+      return () => {
+        clearTimeout(timeoutId);
+        controller.abort();
+      };
+    }, []);
 
   return (
     <footer className="w-full bg-[var(--color-store)] text-gray-800 shadow-lg mt-12">
